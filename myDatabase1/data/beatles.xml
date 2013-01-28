@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data>
+<data description="A Post is an article.">
 
-	<id><![CDATA[beatles]]></id>
-    <type><![CDATA[Post]]></type>
-	<created type="DateTime">1359275112</created>
-	<updated type="DateTime">1359286967</updated>
+	<id type="String" description="The unique identifier"><![CDATA[beatles]]></id>
+    <type type="String" description="The model type"><![CDATA[Post]]></type>
+	<created type="DateTime" description="When was created this record">1359275112</created>
+	<updated type="DateTime" description="When was last updated this record">1359378955</updated>
 
-	<name type="String"><![CDATA[The beatles]]></name>
-	<description type="String"><![CDATA[The beatles est un groupe de musique]]></description>
-    <seeAlso type="Association" possibleAssociation="Post">
-        <Post id="beatles"/>
-        <Post id="queen"/>
-    </seeAlso>
+	<name type="String" description="Name of the post"><![CDATA[The beatles]]></name>
+	<description type="String" description="Here is the post quick description"><![CDATA[The beatles est un groupe de musique]]></description>
 
-    <download description="An attached file to the post" type="File"></download>
+    <thumbnail type="Image" description="The image that represents this post"><Image id="nous-3-image"/></thumbnail>
 
-    <otherPost type="Post">
-        <Post id="beatles"></Post>
-    </otherPost>
+    <download description="An attached file to the post" type="File" url="" mime="" fileSize=""/>
 
-    <otherPosts description="A list of Posts, nothing else!" type="Post[]">
-        <Post id="queen"></Post>
-        <Post id="queen"></Post>
-    </otherPosts>
+    <seeAlso type="Association" possibleAssociation="Post"/>
+
+    <otherPost type="Post"><Post id="beatles"/></otherPost>
+
+    <otherPosts type="Post[]" description="A list of Posts, nothing else!"><Post id="queen"/><Post id="queen"/></otherPosts>
 
 </data>

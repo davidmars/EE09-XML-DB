@@ -24,10 +24,17 @@ traceLabeled("download filesize",$post->download->getFileSize());
 trace("----------------other post (onlyone!)----------");
 traceLabeled("otherPost",$post->otherPost->description);
 
+trace("will save thumbnail in ".$post->otherPost->getId());
+$post->otherPost->thumbnail=Image::getById("nous-3-image");
+$post->otherPost->save();
+traceImg($post->otherPost->thumbnail->file);
+
 trace("----------------other post (manyyyyy!)----------");
 foreach($post->otherPosts as $related){
     traceLabeled($related->getId()."( ".$related->getType()." )",$related->description."");
 }
+
+
 
 trace("----------------see also----------");
 foreach($post->seeAlso->children as $related){

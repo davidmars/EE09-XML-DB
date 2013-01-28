@@ -28,3 +28,8 @@ function traceError($str){
 function traceCode($str){
     echo "<div style='background-color: #000; color:#0f0; padding: 10px; margin: 10px;'>$str</div>";
 }
+function traceImg($url){
+    echo "<div style='background-color: #eee; color:#666; padding: 10px; margin: 10px;'>
+    <img src='".$url."' width='300px'>
+    </div>";
+}

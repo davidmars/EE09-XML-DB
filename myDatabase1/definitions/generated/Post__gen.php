@@ -9,6 +9,7 @@
  * @property DateTime $updated When was last updated this record
  * @property String $name Name of the post
  * @property String $description Here is the post quick description
+ * @property Image $thumbnail The image that represents this post
  * @property File $download An attached file to the post
  * @property Association $seeAlso Related posts to this post
  * @property Post $otherPost 

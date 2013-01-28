@@ -27,7 +27,7 @@ class Image extends ModelXml
         if (!$item) {
             die("You tried to get the Image '$id' but there is no '$id' record !");
         }
-        if ($item->type != "Post") {
+        if ($item->type != "Image") {
             die("You tried to get the Image '$id' ...but '$id' is not a Image, it's a " . $item->getType());
         }
         return $item;

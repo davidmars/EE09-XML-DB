@@ -244,9 +244,12 @@ class ModelXml
 
                 default:
                     if($field->isAModelReference){
+
                         //relation to ONE model of a certain type
                         $newNode=$saveXml->createElement($field->type);
-                        $newNode->setAttribute("id",$this->$fieldName->id);
+                        if($this->$fieldName){
+                            $newNode->setAttribute("id",$this->$fieldName->id);
+                        }
                         XmlUtils::emptyNode($node);
                         $node->appendChild($newNode);
                     }else if($field->isArray){

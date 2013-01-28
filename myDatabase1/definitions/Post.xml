@@ -9,6 +9,8 @@
 	<name           type="String" description="Name of the post" ><![CDATA[]]></name>
 	<description    type="String" description="Here is the post quick description" ><![CDATA[]]></description>
 
+    <thumbnail type="Image" description="The image that represents this post"></thumbnail>
+
     <download   type="File" description="An attached file to the post" mime="" fileSize="0" url=""></download>
 
     <seeAlso        type="Association" description="Related posts to this post"  possibleAssociation="Post"/>

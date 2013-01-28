@@ -29,7 +29,7 @@ class <?php echo $vv->type?> extends ModelXml
         if (!$item) {
             die("You tried to get the <?=$vv->type?> '$id' but there is no '$id' record !");
         }
-        if ($item->type != "Post") {
+        if ($item->type != "<?=$vv->type?>") {
             die("You tried to get the <?=$vv->type?> '$id' ...but '$id' is not a <?=$vv->type?>, it's a " . $item->getType());
         }
         return $item;

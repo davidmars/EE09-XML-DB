@@ -4,7 +4,7 @@
  * An image model is related to a file which is an Image...great :\ . It has extra information
  *
  * @property String $id The unique identifier
- * @property Image $type The model type
+ * @property String $type The model type
  * @property DateTime $created When was created this record
  * @property DateTime $updated When was last updated this record
  * @property String $title Title of the image, will be useful for alt
@@ -27,7 +27,7 @@ class Image extends ModelXml
         if (!$item) {
             die("You tried to get the Image '$id' but there is no '$id' record !");
         }
-        if ($item->type != "Post") {
+        if ($item->type != "Image") {
             die("You tried to get the Image '$id' ...but '$id' is not a Image, it's a " . $item->getType());
         }
         return $item;
