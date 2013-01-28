@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+
+	<id><![CDATA[beatles]]></id>
+    <type><![CDATA[Post]]></type>
+	<created type="DateTime">1359275112</created>
+	<updated type="DateTime">1359286967</updated>
+
+	<name type="String"><![CDATA[The beatles]]></name>
+	<description type="String"><![CDATA[The beatles est un groupe de musique]]></description>
+    <seeAlso type="Association" possibleAssociation="Post">
+        <Post id="beatles"/>
+        <Post id="queen"/>
+    </seeAlso>
+
+    <download description="An attached file to the post" type="File"></download>
+
+    <otherPost type="Post">
+        <Post id="beatles"></Post>
+    </otherPost>
+
+    <otherPosts description="A list of Posts, nothing else!" type="Post[]">
+        <Post id="queen"></Post>
+        <Post id="queen"></Post>
+    </otherPosts>
+
+</data>

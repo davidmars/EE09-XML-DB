@@ -1,0 +1,4 @@
+When you create a new model, it is automatically saved!
+- reason : all associations will works.
+
+If you try to get a model with an incorrect type (not defined class) this model will be ignored

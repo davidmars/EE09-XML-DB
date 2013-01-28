@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data description="An image model is related to a file which is an Image...great :\ . It has extra information">
+
+	<id type="String" description="The unique identifier"><![CDATA[nous-3-image]]></id>
+    <type type="String" description="The model type"><![CDATA[Image]]></type>
+	<created type="DateTime" description="When was created this record">1359373743</created>
+	<updated type="DateTime" description="When was last updated this record">1359373743</updated>
+
+	<title type="String" description="Title of the image, will be useful for alt"><![CDATA[]]></title>
+	<legend type="String" description="Here is the post quick description"><![CDATA[]]></legend>
+
+    <file type="FileImage" description="Well, the image file itself" mime="" fileSize="971137" url="myDatabase1/files/nous-3.jpg" width="" height=""/>
+
+</data>

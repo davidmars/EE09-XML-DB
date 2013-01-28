@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+    <id>queen</id>
+    <type>Post</type>
+    <name type="String"><![CDATA[Queen]]></name>
+    <description type="String"><![CDATA[Queen est un groupe de musique]]></description>
+</data>

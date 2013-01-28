@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<id>beatles</id>
+	<type>Post</type>
+	<name type="String"><![CDATA[The beatles]]></name>
+	<description type="String"><![CDATA[The beatles est un groupe de musique]]></description>
+    <seeAlso type="Association">
+        <Post id="queen"></Post>
+    </seeAlso>
+
+
+
+    <download description="An attached file to the post" type="File">
+        <mime></mime>
+        <filesize>0</filesize>
+        <url>myDatabase1/files/nous-3.jpg</url>
+    </download>
+
+</data>

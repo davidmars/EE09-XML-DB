@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data description="A Post is an article.">
+
+	<id type="String" description="The unique identifier"><![CDATA[post5106660cdc91e]]></id>
+    <type type="String" description="The model type"><![CDATA[Post]]></type>
+	<created type="DateTime" description="When was created this record">1359373836</created>
+	<updated type="DateTime" description="When was last updated this record">1359373836</updated>
+
+	<name type="String" description="Name of the post"><![CDATA[my post name post5106660cdc91e]]></name>
+	<description type="String" description="Here is the post quick description"><![CDATA[ma description]]></description>
+
+    <download type="File" description="An attached file to the post" mime="" fileSize="971137" url="myDatabase1/files/nous-3.jpg"/>
+
+    <seeAlso type="Association" description="Related posts to this post" possibleAssociation="Post"/>
+
+    <otherPost type="Post"><Post id="beatles"/></otherPost>
+
+    <otherPosts type="Post[]" description="A list of Posts, nothing else!"><Post id="queen"/><Post id="queen"/></otherPosts>
+
+</data>

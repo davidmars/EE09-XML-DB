@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<data description="A Post is an article.">
+
+	<id         type="String" description="The unique identifier"><![CDATA[]]></id>
+    <type       type="String" description="The model type"><![CDATA[Post]]></type>
+	<created    type="DateTime" description="When was created this record"><![CDATA[now]]></created>
+	<updated    type="DateTime" description="When was last updated this record"><![CDATA[now]]></updated>
+
+	<name           type="String" description="Name of the post" ><![CDATA[]]></name>
+	<description    type="String" description="Here is the post quick description" ><![CDATA[]]></description>
+
+    <download   type="File" description="An attached file to the post" mime="" fileSize="0" url=""></download>
+
+    <seeAlso        type="Association" description="Related posts to this post"  possibleAssociation="Post"/>
+
+    <otherPost type="Post">
+        <Post id="beatles"></Post>
+    </otherPost>
+
+    <otherPosts type="Post[]" description="A list of Posts, nothing else!" >
+        <Post id="queen"></Post>
+        <Post id="queen"></Post>
+    </otherPosts>
+
+</data>
