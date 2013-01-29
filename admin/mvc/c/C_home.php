@@ -1,0 +1,3 @@
+<?php
+
+die("admin home");

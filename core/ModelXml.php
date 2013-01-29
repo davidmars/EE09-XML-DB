@@ -6,7 +6,7 @@ class ModelXml
      * The database...
      * @var ModelXmlDb
      */
-    public static $db;
+    public $db;
 
     /**
      * The xml related to this post
@@ -58,17 +58,19 @@ class ModelXml
 
     /**
      * @param string $id The id of the record. If you create a new model from scratch this id has to be unused.
-     *
+     * @param $db ModelXmlDb
+     * @throws Exception
      */
-    public function __construct($id)
+    public function __construct($id,$db)
     {
+        $this->db=$db;
         $rc = new ReflectionClass($this);
         $this->type = $rc->getName();
         traceCode("-----------------------------------------------construct a new " . $this->type."-----------");
 
         if($id!="FROM_DB_HACK"){
            //it is a real new model
-          if(self::$db->modelExists($id)){
+          if($this->db->modelExists($id)){
             throw new Exception("You tried to create a new ".$this->type." with the id ".$id." but this id is already used by an other record.
             Try an other id or delete the $id record. Ciao!");
           }
@@ -82,6 +84,21 @@ class ModelXml
         traceCode("-----------------------------------------------construct end " . $this->type."-----------");
 
 
+    }
+
+    /**
+     * FileImage
+     */
+    public function getThumbnail(){
+        $definition = $this->db->getModelDefinition($this->type);
+        if($definition->thumbnail){
+            $fieldName=$definition->thumbnail->varName;
+            return $this->$fieldName;
+        }else{
+            $f= new FileImage(null,$this);
+            $f->setUrl("config/default-thumbnail.jpg");
+            return $f;
+        }
     }
 
     /**
@@ -102,7 +119,7 @@ class ModelXml
     private function parse()
     {
 
-        $definition = self::$db->getModelDefinition($this->type);
+        $definition = $this->db->getModelDefinition($this->type);
         if (!$this->xml) {
             //if no xml, clone the structure one
             $this->xml = $definition->xml->cloneNode(true);
@@ -145,15 +162,15 @@ class ModelXml
 
                 //NodeFields
                 case "File":
-                    $val=new File($node);
+                    $val=new File($node,$this);
                     $this->$fieldName=$val;
                     break;
                 case "FileImage":
-                    $val=new FileImage($node);
+                    $val=new FileImage($node,$this);
                     $this->$fieldName=$val;
                     break;
                 case "Association":
-                    $val=new Association($node);
+                    $val=new Association($node,$this);
                     $this->$fieldName=$val;
                     break;
                 default:
@@ -161,11 +178,12 @@ class ModelXml
                        //relation to ONE model
                        $this->$fieldName=null;
                        for($i=0;$i<$node->childNodes->length;$i++){
+                           /** @var $n DOMElement */
                            $n=$node->childNodes->item($i);
                            if($n->nodeType==1){
                             $id=$n->getAttribute("id");
-                            if($id && self::$db->modelExists($id)){
-                                $val=self::$db->getModelById($id);
+                            if($id && $this->db->modelExists($id)){
+                                $val=$this->db->getModelById($id);
                                 $this->$fieldName=$val;
                                 break;
                             }
@@ -178,8 +196,8 @@ class ModelXml
                             $n=$node->childNodes->item($i);
                             if($n->nodeType==1){
                                 $id=$n->getAttribute("id");
-                                if($id && self::$db->modelExists($id)){
-                                    $val=self::$db->getModelById($id);
+                                if($id && $this->db->modelExists($id)){
+                                    $val=$this->db->getModelById($id);
                                     if($val->type==$field->arrayType){
                                         $valArray[]=$val;
                                     }
@@ -209,7 +227,7 @@ class ModelXml
         //update refresh
         $this->updated->setTimestamp(time());
 
-        $definition = self::$db->getModelDefinition($this->type);
+        $definition = $this->db->getModelDefinition($this->type);
 
         //get a fresh new XML from the structure
 
@@ -273,7 +291,7 @@ class ModelXml
             }
         }
 
-        $saveXml->save(self::$db->getModelXmlUrl($this->id));
+        $saveXml->save($this->db->getModelXmlUrl($this->id));
         $this->xml = $saveXml;
     }
 
@@ -282,7 +300,7 @@ class ModelXml
      */
     public function delete(){
 
-        self::$db->deleteModel($this->id);
+        $this->db->deleteModel($this->id);
 
         //remove all references to this one in others models
 

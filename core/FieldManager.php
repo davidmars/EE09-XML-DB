@@ -16,7 +16,7 @@ class M_fieldManager
         $this->type=XmlUtils::getFirst($this->xml,"type")->nodeValue;
 
         for ($i = 0; $i < $xml->firstChild->childNodes->length; $i++) {
-
+            /** @var DOMElement $modelNode  */
             $modelNode = $xml->firstChild->childNodes->item($i);
             if ($modelNode->nodeType != XML_TEXT_NODE) {
                 $this->fields[] = $this->nodeToField($modelNode);
@@ -24,6 +24,10 @@ class M_fieldManager
         }
     }
 
+    /**
+     * @var M_field The field to use to display a thumbnail
+     */
+    public $thumbnail;
     /**
      * @var string The model name
      */
@@ -45,6 +49,7 @@ class M_fieldManager
     /**
      * From a node, return a field
      * @param DOMElement $node
+     * @return \M_field
      */
     private function nodeToField($node)
     {
@@ -58,6 +63,15 @@ class M_fieldManager
         $f->description=$node->getAttribute("description");
         $f->varName = $node->nodeName;
         $f->type = $type;
+
+        //define the thumbnail field
+        if(!$this->thumbnail && $type=="FileImage"){
+            $this->thumbnail=$f;
+        }
+        if($node->getAttribute("editable")=="false"){
+            $f->editable=false;
+        }
+        $f->editor=$node->getAttribute("editor");
 
         if(class_exists($f->type) && in_array("ModelXml",class_parents($f->type))){
             //a single model reference
@@ -78,41 +92,7 @@ class M_fieldManager
 
 }
 
-class M_field
-{
-    /**
-     * @var string The variable name
-     */
-    public $varName;
-    /**
-     * @var string Define the type of field
-     */
-    public $type;
-    /**
-     * @var The default value of this field
-     */
-    public $defaultValue;
-    /**
-     * @var DOMElement The xml node
-     */
-    public $node;
-    /**
-     * @var string The field description
-     */
-    public $description;
-    /**
-     * @var bool Will be true if the field is a reference to a model
-     */
-    public $isAModelReference=false;
-    /**
-     * @var bool Will be true if the field is an array of a certain model
-     */
-    public $isArray=false;
-    /**
-     * @var string Determine the type of child in the array
-     */
-    public $arrayType="";
-}
+
 
 
 

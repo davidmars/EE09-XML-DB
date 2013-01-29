@@ -15,11 +15,19 @@ class NodeField
 
     /**
      * @param $node DOMElement
+     * @param $model ModelXml
      */
-    public function __construct($node){
-         $this->node=$node;
+    public function __construct($node=null,$model=null){
+        if($node){
+        $this->node=$node;
+        }
+        $this->model=$model;
     }
 
+    /**
+     * @var ModelXml
+     */
+    public $model;
     /**
      * DOMElement
      */

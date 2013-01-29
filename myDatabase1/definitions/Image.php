@@ -19,11 +19,12 @@ class Image extends ModelXml
     /**
      * Search a Image by id. If the id is found or if the record is not a Image, will return an Exception error message
      * @param string $id A model unique identifier.
+     * @param ModelXmlDb $database The database where to search.
      * @return Image The Image model.
      */
-    public static function getById($id)
+    public static function getById($id,$database)
     {
-        $item = self::$db->getModelById($id);
+        $item = $database->getModelById($id);
         if (!$item) {
             die("You tried to get the Image '$id' but there is no '$id' record !");
         }

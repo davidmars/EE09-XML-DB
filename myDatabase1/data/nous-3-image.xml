@@ -9,6 +9,6 @@
 	<title type="String" description="Title of the image, will be useful for alt"><![CDATA[]]></title>
 	<legend type="String" description="Here is the post quick description"><![CDATA[]]></legend>
 
-    <file type="FileImage" description="Well, the image file itself" mime="" fileSize="971137" url="myDatabase1/files/nous-3.jpg" width="" height=""/>
+    <file type="FileImage" description="Well, the image file itself" mime="" fileSize="971137" url="files/nous-3.jpg" width="" height=""/>
 
 </data>

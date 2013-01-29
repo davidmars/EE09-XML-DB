@@ -13,8 +13,8 @@ class Association extends NodeField
      */
     public $children=array();
 
-    public function __construct($node){
-        parent::__construct($node);
+    public function __construct($node,$model){
+        parent::__construct($node,$model);
 
         /** @var DOMElement $n */
         for ($i=0;$i<$this->node->childNodes->length;$i++) {
@@ -22,7 +22,7 @@ class Association extends NodeField
             $type = $n->nodeName;
             if (class_exists($type)) {
                 traceCode("association to : " . $type);
-                $m = ModelXmlDb::$current->getModelById($n->getAttribute("id"));
+                $m = $this->model->db->getModelById($n->getAttribute("id"));
                 $this->children[] = $m;
             }
         }

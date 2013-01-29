@@ -4,7 +4,7 @@
 	<id type="String" description="The unique identifier"><![CDATA[queen]]></id>
     <type type="String" description="The model type"><![CDATA[Post]]></type>
 	<created type="DateTime" description="When was created this record">1359363720</created>
-	<updated type="DateTime" description="When was last updated this record">1359378955</updated>
+	<updated type="DateTime" description="When was last updated this record">1359431272</updated>
 
 	<name type="String" description="Name of the post"><![CDATA[Queen]]></name>
 	<description type="String" description="Here is the post quick description"><![CDATA[Queen est un groupe de musique]]></description>

@@ -44,11 +44,13 @@
          * @var View a view outside this view, in practice this view is a layout
          */
         private $outerView;
+
         /**
          * Constructeur
          *
          * @param string $path Chemin de la vue
-         * @param string $theme Theme de la vue
+         * @param mixed $viewVariables
+         * @internal param string $theme Theme de la vue
          */
         public function __construct( $path,$viewVariables=null ){
             $this->path = $path;
@@ -60,10 +62,10 @@
         /**
          * Try to return a valid path for a template file.
          * @param string $path a relative path to the template file without .php
-         * @return string|false the correct path or false if there is no file that match.
+         * @return string|bool the correct path or false if there is no file that match.
          */
         private static function getRealPath($path){
-            $scriptPath = __DIR__."/v/".$path.".php";
+            $scriptPath = $path.".php";
             if(file_exists($scriptPath)){
                 return $scriptPath;
             }
@@ -76,7 +78,6 @@
         /**
          * Process the template with the current properties.
          *
-         * @param array $context Les variables disponibles dans les templates
          * @return string Le template généré
          */
         private function run(){
@@ -84,8 +85,18 @@
             $scriptPath = self::getRealPath($this->path);
 
             if(!$scriptPath){
-                return("<div style='font-size:12px;color:#f00;'>Can't find the template :".$this->path." ( called in ".$this->caller->path." )</div>");
+                $mess="<div style='font-size:12px;color:#f00;'>
+                Can't find the template :".$this->path."</div>";
+                if($this->caller){
+                    $mess.="<div style='font-size:12px;color:#f00;'>
+                    ( called in ".$this->caller->path." )
+                    </div>";
+                }
+                return $mess;
             }
+
+
+
 
             //declare the variables in the template
             /* @var $_vars ViewVariables */
@@ -110,10 +121,11 @@
 
         /**
          * Process the template and return the result.
-         * @param String $view path to the template to execute or insert.
-         * @param ViewVariables $viewVariables Tableau des variables à transmettre à la vue
+         * @param string|null $path
+         * @param mixed $viewVariables Object that will feed the view template
+         * @internal param String $view path to the template to execute or insert.
          * @return String The template result after execution
-         **/
+         */
         function render( $path=null , $viewVariables=null ){
 
             $viewVariables=isset($viewVariables) ? $viewVariables : $this->viewVariables;
@@ -135,7 +147,7 @@
          * Insert the current template inside an other template.
          * In the layout template use the variable $_content to display the current template.
          * @param String $path path to the template file
-         * @param ViewVariables $viewVariables the data object given to the outer view, if not given, the object will be the current strictParams
+         * @param mixed $viewVariables the data object given to the outer view, if not given, the object will be the current strictParams
          */
         function inside( $path, $viewVariables=null ){
             $viewVariables=$viewVariables ? $viewVariables : $this->viewVariables;

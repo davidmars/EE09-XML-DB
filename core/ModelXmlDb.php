@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  */
@@ -20,15 +21,17 @@ class ModelXmlDb
      * @var M_fieldManager[]
      */
     public $definitions = array();
+
     /**
-     * @var ModelXmlDb
+     * @var string Path to the database relative to the main php file. Useful to get web url
      */
-    public static $current;
+    public $directory;
     /**
      * @param string $rootPath where is located your database?
      */
     public function __construct($rootPath)
     {
+
         //include core files
         require_once(__DIR__ . "/XmlUtils.php");
         require_once(__DIR__ . "/ModelXml.php");
@@ -44,9 +47,6 @@ class ModelXmlDb
         require_once(__DIR__ . "/View.php");
 
 
-        //okay...it's not a really good idea to put it in static. TODO::remove this ugly static.
-        ModelXml::$db=$this;
-        self::$current=$this;
 
         //set directories
         $this->rootPath = $rootPath;
@@ -106,8 +106,8 @@ class ModelXmlDb
         foreach (scandir($this->definitionsPath) as $file) {
             $f = $this->definitionsPath . "/" . $file;
             if (is_file($f)) {
-                if (preg_match("#(.*)\.xml$#", $file, $matches)) {
-                    $modelName = $matches[1];
+                $modelName=$this->extractNameXml($file);
+                if ($modelName) {
                     $this->bootModel($modelName);
                     traceCode("boot $modelName.xml");
                 }
@@ -115,6 +115,16 @@ class ModelXmlDb
         }
     }
 
+    /**
+     * @param string $file A file name (without path).
+     * @return bool|string If not an xml will return false else will return the file name without extension.
+     */
+    private function extractNameXml($file){
+        if (preg_match("#(.*)\.xml#", $file, $matches)) {
+            return $matches[1];
+        }
+        return false;
+    }
     /**
      * Loads the structure xml, include the related php file.
      * @param string $modelName The model name
@@ -169,9 +179,25 @@ class ModelXmlDb
         }
         $xml = new DOMDocument();
         $xml->load($file);
-        $item = self::fromXml($xml);
+        $item = $this->fromXml($xml);
         $this->modelReferences[$modelId] = $item;
         return $item;
+    }
+
+    /**
+     * Return list of models
+     * @return ModelXml[]
+     */
+    public function getModelList(){
+        $arr=array();
+        foreach(scandir($this->dataPath) as $f){
+            $file=$this->dataPath."/".$f;
+            $modelName=$this->extractNameXml($f);
+            if(is_file($file) && $modelName){
+                $arr[]=$this->getModelById($modelName);
+            }
+        }
+        return $arr;
     }
 
     /**
@@ -179,13 +205,13 @@ class ModelXmlDb
      * @param DOMDocument $xml
      * @return ModelXml The model object. In fact it will be a typed model according to xml type value, not a generic ModelXML object.
      */
-    private static function fromXml($xml)
+    private function fromXml($xml)
     {
         $type = XmlUtils::getFirst($xml, "type")->nodeValue;
         $id = XmlUtils::getFirst($xml, "id")->nodeValue;
         if (class_exists($type)) {
             /** @var $model ModelXml */
-            $model = new $type("FROM_DB_HACK");
+            $model = new $type("FROM_DB_HACK",$this);
             $rc=new ReflectionClass($type);
             $_id=$rc->getProperty("id");
             $_id->setAccessible(true);
@@ -196,6 +222,11 @@ class ModelXmlDb
         } else {
             return null;
         }
+    }
+
+    public function deleteModel($id)
+    {
+        //TODO::write this class
     }
 
 }

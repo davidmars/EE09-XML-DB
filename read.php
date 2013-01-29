@@ -25,7 +25,7 @@ trace("----------------other post (onlyone!)----------");
 traceLabeled("otherPost",$post->otherPost->description);
 
 trace("will save thumbnail in ".$post->otherPost->getId());
-$post->otherPost->thumbnail=Image::getById("nous-3-image");
+$post->otherPost->thumbnail=Image::getById("nous-3-image",$db);
 $post->otherPost->save();
 traceImg($post->otherPost->thumbnail->file);
 
@@ -42,10 +42,10 @@ foreach($post->seeAlso->children as $related){
 }
 
 traceComment("Get the 'queen' model by Post object");
-$post=Post::getById("queen");
+$post=Post::getById("queen",$db);
 traceLabeled("description:",$post->description);
 
-$post->otherPost=Post::getById("queen");
+$post->otherPost=Post::getById("queen",$db);
 if(!$db->modelExists("aaaaaaaa")){
     $post->otherPosts[]=new Post("aaaaaaaa");
 }
@@ -60,4 +60,4 @@ $post=Post::getById("I-m-a-shit-model");
 trace($post->description);
 */
 
-?>
+

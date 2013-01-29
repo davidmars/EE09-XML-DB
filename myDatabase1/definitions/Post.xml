@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <data description="A Post is an article.">
 
-	<id         type="String" description="The unique identifier"><![CDATA[]]></id>
-    <type       type="String" description="The model type"><![CDATA[Post]]></type>
-	<created    type="DateTime" description="When was created this record"><![CDATA[now]]></created>
-	<updated    type="DateTime" description="When was last updated this record"><![CDATA[now]]></updated>
+	<id         type="String" editable="false" editor="preview-text" description="The unique identifier"><![CDATA[]]></id>
+    <type       type="String" editable="false" editor="preview-text"  description="The model type"><![CDATA[Post]]></type>
+	<created    type="DateTime"  editable="false" description="When was created this record"><![CDATA[now]]></created>
+	<updated    type="DateTime"  editable="false" description="When was last updated this record"><![CDATA[now]]></updated>
 
-	<name           type="String" description="Name of the post" ><![CDATA[]]></name>
-	<description    type="String" description="Here is the post quick description" ><![CDATA[]]></description>
+	<name           type="String"  description="Name of the post" ><![CDATA[]]></name>
+	<description    type="String" editor="text-area" description="Here is the post quick description" ><![CDATA[]]></description>
 
     <thumbnail type="Image" description="The image that represents this post"></thumbnail>
 

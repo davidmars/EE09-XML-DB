@@ -32,17 +32,22 @@ class FileImage extends File
      * @var int The image height in pixel
      */
     private $height=0;
+
     /**
      * @param $node DOMElement
+     * @param ModelXml $model
      */
-    public function __construct($node){
-        parent::__construct($node);
+    public function __construct($node=null,$model=null){
+        parent::__construct($node,$model);
+        if($node){
         $this->height=$this->node->getAttribute("height");
         $this->width=$this->node->getAttribute("width");
+        }
     }
     public function getNode(){
         $this->node->setAttribute("width",$this->width);
         $this->node->setAttribute("height",$this->height);
         return parent::getNode();
     }
+
 }

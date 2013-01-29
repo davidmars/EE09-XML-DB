@@ -27,11 +27,16 @@ class File extends NodeField
             $this->fileSize=filesize($this->url);
         }
     }
+
     /**
+     * @param bool $resolvePath
      * @return string The url of the file
      */
-    public function getUrl()
+    public function getUrl($resolvePath=true)
     {
+        if($resolvePath){
+            return $this->model->db->rootPath."/".$this->url;
+        }
         return $this->url;
     }
     /**
@@ -54,7 +59,9 @@ class File extends NodeField
      * @return bool True if the file exists, false if not...
      */
     public function exists(){
-        $r=file_exists($this->url);
+
+
+        $r=file_exists($this->model->db->rootPath."/".$this->url);
         return $r;
     }
 
@@ -64,12 +71,15 @@ class File extends NodeField
 
     /**
      * @param $node DOMElement
+     * @param ModelXml $model
      */
-    public function __construct($node){
-        parent::__construct($node);
-        $this->fileSize=$this->node->getAttribute("fileSize");
-        $this->url=$this->node->getAttribute("url");
-        $this->mime=$this->node->getAttribute("mime");
+    public function __construct($node=null,$model=null){
+        parent::__construct($node,$model);
+        if($node){
+            $this->fileSize=$this->node->getAttribute("fileSize");
+            $this->url=$this->node->getAttribute("url");
+            $this->mime=$this->node->getAttribute("mime");
+        }
     }
     public function getNode(){
         $this->node->setAttribute("url",$this->url);
