@@ -13,7 +13,7 @@ class M_fieldManager
         $this->xml = $xml;
 
         $this->description=$this->xml->documentElement->getAttribute("description");
-        $this->type=XmlUtils::getFirst($this->xml,"type")->nodeValue;
+        $this->type=$this->xml->documentElement->nodeName;
 
         for ($i = 0; $i < $xml->firstChild->childNodes->length; $i++) {
             /** @var DOMElement $modelNode  */

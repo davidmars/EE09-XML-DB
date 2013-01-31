@@ -15,7 +15,12 @@ $value=$vv->value;
     <label class="control-label" for="inputSuccess"><?=$vv->title?></label>
     <div class="controls">
         <div class="input-append">
-            <input  class="span3" type="text" id="<?=$vv->varName?>" value="<?=$vv->value?>">
+            <input  class="span3"
+                    type="text"
+                    id="<?=$vv->varName?>"
+                    name="<?=$vv->varName?>"
+                    value="<?=$vv->value?>"
+                    >
             <button class="btn" type="button"><i class="icon-circle-arrow-up"></i> </button>
         </div>
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Post id="Hello" created="1359373743" updated="1359612729" description="A Post is an article.">
+<Post id="bands" created="1359367705" updated="1359612600" description="A Post is an article.">
 
 
-	<name type="String" description="Name of the post"><![CDATA[]]></name>
+	<name type="String" description="Name of the post"><![CDATA[tototototototo.]]></name>
 	<description type="String" editor="text-area" description="Here is the post quick description"><![CDATA[]]></description>
 
     <thumbnail type="Image" description="The image that represents this post"><Image/></thumbnail>

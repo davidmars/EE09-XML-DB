@@ -15,8 +15,9 @@ $vv = $_vars;
         <textarea <?=$vv->attrDisabled()?>
                 rows="5"
                 class="span7"
+                name="<?=$vv->varName?>"
                 id="<?=$vv->varName?>"
-                ><?=$vv->value?></textarea>
+                ><?=htmlentities($vv->value)?></textarea>
         <span class="help-block"><?=$vv->description?></span>
     </div>
 </div>

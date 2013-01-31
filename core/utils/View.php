@@ -15,7 +15,7 @@
          *
          * @var ViewVariables Here are the variables used in the view.
          * Inside the template use $_vars to retrieve it.
-         * It's an object, so it should be strict and it should be precise.
+         * It's an object, so it should be strict.
          */
         public $viewVariables;
         /**
@@ -65,15 +65,21 @@
          * @return string|bool the correct path or false if there is no file that match.
          */
         private static function getRealPath($path){
-            $scriptPath = $path.".php";
-            if(file_exists($scriptPath)){
-                return $scriptPath;
+            foreach (self::$rootPaths as $root){
+                $scriptPath = $root."/".$path.".php";
+                if(file_exists($scriptPath)){
+                    return $scriptPath;
+                }
             }
-
             return false;
 
 
         }
+
+        /**
+         * @var array Here are the root paths to include views. Each time you will render a view it will be used to search for the template php file.
+         */
+        public static $rootPaths=array();
 
         /**
          * Process the template with the current properties.

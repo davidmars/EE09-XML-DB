@@ -8,7 +8,7 @@
 /* @var $this View */
 /* @var $vv VM_layout */
 $vv = $_vars;
-$this->inside("mvc/v/layout/html5bp",$vv);
+$this->inside("layout/html5bp",$vv);
 
 ?>
 <!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
@@ -54,7 +54,7 @@ $this->inside("mvc/v/layout/html5bp",$vv);
             <div class="row">
                 <div class="span4">
                     <ul class="nav nav-list">
-                        <?=$this->render("mvc/v/layout/nav/left/models-list",$vv->getLayout()->getModelList())?>
+                        <?=$this->render("layout/nav/left/models-list",$vv->getLayout()->getModelList())?>
                     </ul>
                 </div>
                 <div class="span8">

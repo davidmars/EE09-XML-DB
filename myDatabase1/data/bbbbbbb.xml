@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data description="A Post is an article.">
+<Post id="bbbbbbb" created="1359367705" updated="1359615292" description="A Post is an article.">
 
-	<id type="String" description="The unique identifier"><![CDATA[bbbbbbb]]></id>
-    <type type="String" description="The model type"><![CDATA[Post]]></type>
-	<created type="DateTime" description="When was created this record">1359367705</created>
-	<updated type="DateTime" description="When was last updated this record">1359367705</updated>
 
-	<name type="String" description="Name of the post"><![CDATA[]]></name>
-	<description type="String" description="Here is the post quick description"><![CDATA[]]></description>
+	<name type="String" description="Name of the post"><![CDATA[bbbbbbbb]]></name>
+	<description type="String" editor="text-area" description="Here is the post quick description"><![CDATA[fsdsdffgfdgfdg
+fdgfdgdfgfdgfdgfdg < sfsdfsf > </textarea> 
+<span><test>]]></description>
+
+    <thumbnail type="Image" description="The image that represents this post"><Image/></thumbnail>
 
     <download type="File" description="An attached file to the post" mime="" fileSize="0" url=""/>
 
@@ -17,4 +17,4 @@
 
     <otherPosts type="Post[]" description="A list of Posts, nothing else!"><Post id="queen"/><Post id="queen"/></otherPosts>
 
-</data>
+</Post>

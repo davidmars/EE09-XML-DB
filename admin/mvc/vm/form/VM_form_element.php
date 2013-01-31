@@ -23,7 +23,7 @@ class VM_form_element extends ViewVariables
     /**
      * @var string
      */
-    public $template="mvc/v/form/default";
+    public $template="form/default";
     /**
      * @var bool
      */
@@ -64,34 +64,34 @@ class VM_form_element extends ViewVariables
                 switch($field->editor){
                     case "text-area":
                         $this->cssSpan="span8";
-                        $this->template="mvc/v/form/input-textarea";
+                        $this->template="form/input-textarea";
                         break;
 
                     default:
-                        $this->template="mvc/v/form/input-text";
+                        $this->template="form/input-text";
                         break;
                 }
                 break;
 
             case "FileImage":
                 $this->value=$model->$varName;
-                $this->template="mvc/v/form/input-image";
+                $this->template="form/input-image";
                 break;
 
             case "File":
                 $this->value=$model->$varName;
-                $this->template="mvc/v/form/input-file";
+                $this->template="form/input-file";
                 break;
 
             case "DateTime":
                 $this->value=$model->$varName;
-                $this->template="mvc/v/form/input-date";
+                $this->template="form/input-date";
 
             default;
 
                 if($field->isAModelReference){
                     $this->value=$model->$varName;
-                    $this->template="mvc/v/form/assoc/model-assoc";
+                    $this->template="form/assoc/model-assoc";
                 }
                 //$this->
 

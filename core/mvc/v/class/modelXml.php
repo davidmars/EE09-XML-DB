@@ -10,7 +10,7 @@ $vv = $_vars;
  * <?=$vv->description."\n"?>
  *
 <?php foreach($vv->fields as $f):?>
-<?php echo $this->render("gen/property",$f)."\n"?>
+<?php echo $this->render("class/property",$f)."\n"?>
 <?php endforeach?>
  *
  */

@@ -6,13 +6,14 @@
  * - NO EXOTIC PHP LIB
  */
 
-require_once("../core/ClassAutoLoader.php");
+require_once("../core/utils/ClassAutoLoader.php");
 $autoLoader=new ClassAutoLoader();
-$autoLoader->addPath("../core");
-$autoLoader->addPath("../core/fields");
+$autoLoader->addPath("../core",true);
 $autoLoader->addPath("mvc/vm",true);
 $autoLoader->addPath("mvc/c");
 
+//add admin template views
+View::$rootPaths[]=__DIR__."/mvc/v";
 
 //require_once("../core/ModelXmlDb.php");
 TraceConf::$doTrace=false;

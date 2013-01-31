@@ -12,17 +12,17 @@ $vv = $_vars;
 $value=$vv->value;
 ?>
 <div class="control-group">
-    <label class="control-label" for=""><?=$vv->title?></label>
+    <label class="control-label"><?=$vv->title?></label>
     <div class="controls">
 
         <?//one model ?>
+        <div class="row">
+        <div class="span3">
         <?php if($vv->value):?>
-            <div class="thumbnail">
-                <img src="<?=$value->getThumbnail()->getUrl()?>" alt="">
-                <h3><?=$value->getId()?></h3>
-                <p><?=$value->getType()?></p>
-            </div>
+            <?=$this->render("model-preview/medium",$value);?>
         <?php endif?>
+        </div>
+        </div>
 
         <span class="help-block"><?=$vv->description?></span>
     </div>

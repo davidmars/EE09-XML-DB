@@ -12,7 +12,13 @@ $vv = $_vars;
 <div class="control-group">
     <label class="control-label" for=""><?=$vv->title?></label>
     <div class="controls">
-        <input class="span3"type="text" <?=$vv->attrDisabled()?> id="<?=$vv->varName?>" value="<?=$vv->value?>">
+        <input
+                class="span3"
+                type="text"
+                <?=$vv->attrDisabled()?>
+                id="field-id-<?=$vv->varName?>"
+                name="<?=$vv->varName?>"
+                value="<?=$vv->value?>">
         <span class="help-block"><?=$vv->description?></span>
     </div>
 </div>

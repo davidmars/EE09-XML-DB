@@ -1,14 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<data description="An image model is related to a file which is an Image...great :\ . It has extra information">
-
-	<id         type="String" description="The unique identifier"><![CDATA[]]></id>
-    <type       type="String" description="The model type"><![CDATA[Image]]></type>
-	<created    type="DateTime" description="When was created this record"><![CDATA[now]]></created>
-	<updated    type="DateTime" description="When was last updated this record"><![CDATA[now]]></updated>
+<Image id="" created="" updated="" description="An image model is related to a file which is an Image...great :\ . It has extra information">
 
 	<title     type="String" description="Title of the image, will be useful for alt" ><![CDATA[]]></title>
 	<legend    type="String" description="Here is the post quick description" ><![CDATA[]]></legend>
 
     <file   type="FileImage" description="Well, the image file itself" mime="" fileSize="0" url="" width="" height=""/>
 
-</data>
+</Image>

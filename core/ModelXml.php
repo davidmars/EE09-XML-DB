@@ -3,28 +3,22 @@
 class ModelXml
 {
     /**
-     * The database...
+     * The database where is recorded this object
      * @var ModelXmlDb
      */
     public $db;
 
     /**
-     * The xml related to this post
+     * The xml storage related to this record
      * @var DOMDocument
      */
     public $xml;
 
 
     /**
-     * @var string the identifier of this model
+     * @var string The identifier of this model, it is also the xml storage file name
      */
     protected  $id;
-
-    /**
-     * @var string What kind of model?
-     */
-    protected $type;
-
     /**
      * @return string
      */
@@ -33,6 +27,10 @@ class ModelXml
         return $this->id;
     }
 
+    /**
+     * @var string What kind of model?
+     */
+    protected $type;
     /**
      * @return string
      */
@@ -44,12 +42,28 @@ class ModelXml
     /**
      * @var DateTime
      */
-    public $created;
+    protected $created;
 
     /**
      * @var DateTime
      */
-    public $updated;
+    protected $updated;
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
 
     /**
      * @var bool When it is set to false, it means that the values have not been set.
@@ -69,16 +83,28 @@ class ModelXml
         traceCode("-----------------------------------------------construct a new " . $this->type."-----------");
 
         if($id!="FROM_DB_HACK"){
-           //it is a real new model
-          if($this->db->modelExists($id)){
+            //it is a real new model
+            if($this->db->modelExists($id)){
             throw new Exception("You tried to create a new ".$this->type." with the id ".$id." but this id is already used by an other record.
             Try an other id or delete the $id record. Ciao!");
-          }
+            }
 
-          //okay...it is a real new model
-          $this->id=$id;
-          $this->parse();
-          $this->save();
+            //okay...it is a real new model
+
+            //set the id
+            $this->id=$id;
+
+            //set the xml from the structure
+            $definition=$db->getModelDefinition($this->type);
+            $this->xml = $definition->xml->cloneNode(true);
+            $this->xml->firstChild->setAttribute("id",$this->id);
+            $this->xml->firstChild->setAttribute("created",time());
+            $this->xml->firstChild->setAttribute("updated",time());
+
+            $this->parse();
+            $this->save();
+
+
         }
 
         traceCode("-----------------------------------------------construct end " . $this->type."-----------");
@@ -87,7 +113,10 @@ class ModelXml
     }
 
     /**
-     * FileImage
+     * Return a FileImage field object that best represents the record.
+     * If the record has a FileImage field and this one is not null, it will be returned.
+     * If not, a default FileImage field will be returned
+     * @return FileImage The FileImage field
      */
     public function getThumbnail(){
         $definition = $this->db->getModelDefinition($this->type);
@@ -102,6 +131,7 @@ class ModelXml
     }
 
     /**
+     * The magic getter should be called once. When this call occurs, the xml is parsed.
      * @param $field
      * @return mixed
      */
@@ -112,6 +142,17 @@ class ModelXml
         }
         return $this->$field;
     }
+    /**
+     * @param $field
+     * @return mixed
+     */
+    public function __set($field,$val)
+    {
+        if (!$this->parsed) {
+            $this->parse();
+        }
+        $this->$field=$val;
+    }
 
     /**
      *  Parse the xml to fill the model fields
@@ -120,18 +161,18 @@ class ModelXml
     {
 
         $definition = $this->db->getModelDefinition($this->type);
-        if (!$this->xml) {
-            //if no xml, clone the structure one
-            $this->xml = $definition->xml->cloneNode(true);
-            //id should not be overwritten
-            XmlUtils::getFirst($this->xml,"id")->nodeValue=$this->id;
-        }
+
 
         traceCode("----parse-----" . $this->getId());
 
+        //meta
+        $this->created=new DateTime("@".$this->xml->firstChild->getAttribute("created"));
+        $this->updated=new DateTime("@".$this->xml->firstChild->getAttribute("updated"));
+
+        //fields
         foreach ($definition->fields as $field) {
 
-            traceCode("Parse and set set field " . $field->varName." (".$field->type.")");
+            traceCode("Parse and set field " . $field->varName." (".$field->type.")");
 
             /** @var string $fieldName name of the property */
             $fieldName = $field->varName;
@@ -227,12 +268,16 @@ class ModelXml
         //update refresh
         $this->updated->setTimestamp(time());
 
+
         $definition = $this->db->getModelDefinition($this->type);
 
         //get a fresh new XML from the structure
 
         /** @var $saveXml DOMDocument */
         $saveXml = $definition->xml->cloneNode(true);
+        $saveXml->firstChild->setAttribute("id",$this->getId());
+        $saveXml->firstChild->setAttribute("created",$this->created->getTimestamp());
+        $saveXml->firstChild->setAttribute("updated",$this->updated->getTimestamp());
 
         foreach ($definition->fields as $field) {
 
@@ -240,7 +285,6 @@ class ModelXml
             traceCode("save field " . $fieldName);
             $node = XmlUtils::getFirst($saveXml, $fieldName);
             switch ($field->type) {
-
                 case "String":
                     XmlUtils::cdata($saveXml, $node, $this->$fieldName);
                     break;

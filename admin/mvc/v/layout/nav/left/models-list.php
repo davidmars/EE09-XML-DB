@@ -15,6 +15,7 @@ $vv = $_vars;
     <li class="divider"></li>
 <?php foreach($vv->list as $record):?>
 <li class="<?=$record->cssActive()?>"><a href="<?=$record->hrefEdit?>">
-    <img src="<?=$record->model->getThumbnail()->getUrl()?>" style="height: 20px;" > <?=$record->model->getType()." - ".$record->model->getId()?></a>
+    <img src="<?=$record->model->getThumbnail()->getUrl()?>"
+         style="height: 20px;" > <?=$record->model->getType()." - ".$record->model->getId()?></a>
 </li>
 <?php endforeach?>

@@ -33,18 +33,12 @@ class ModelXmlDb
     {
 
         //include core files
-        require_once(__DIR__ . "/XmlUtils.php");
-        require_once(__DIR__ . "/ModelXml.php");
-
-        //fields
-        require_once(__DIR__ . "/FieldManager.php");
-        require_once(__DIR__ . "/fields/NodeField.php");
-        require_once(__DIR__ . "/fields/File.php");
-        require_once(__DIR__ . "/fields/FileImage.php");
-        require_once(__DIR__ . "/fields/Association.php");
+        require_once(__DIR__). "/utils/ClassAutoLoader.php";
+        $autoLoader=new ClassAutoLoader();
+        $autoLoader->addPath(__DIR__,true);
 
         //code generation
-        require_once(__DIR__ . "/View.php");
+        View::$rootPaths[]=__DIR__."/mvc/v";
 
 
 
@@ -137,7 +131,7 @@ class ModelXmlDb
         $this->definitions[$modelName] = new M_fieldManager($xml);
 
         //php gen
-        $view=new View("gen/class",$this->definitions[$modelName]);
+        $view=new View("class/modelXml",$this->definitions[$modelName]);
         $code=$view->render();
         file_put_contents($this->definitionsPath."/generated/".$modelName."__gen.php",$code);
     }
@@ -207,8 +201,8 @@ class ModelXmlDb
      */
     private function fromXml($xml)
     {
-        $type = XmlUtils::getFirst($xml, "type")->nodeValue;
-        $id = XmlUtils::getFirst($xml, "id")->nodeValue;
+        $type = $xml->firstChild->nodeName;
+        $id = $xml->firstChild->getAttribute("id");
         if (class_exists($type)) {
             /** @var $model ModelXml */
             $model = new $type("FROM_DB_HACK",$this);

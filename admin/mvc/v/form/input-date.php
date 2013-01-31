@@ -16,7 +16,13 @@ $value=$vv->value;
     <div class="controls">
 
         <div class="input-append">
-            <input class="span3" <?=$vv->attrDisabled()?> id="" type="text" value="<?=$value->format("Y/m/d h:i:s")?>">
+            <input
+                class="span3"
+                <?=$vv->attrDisabled()?>
+                id=""
+                name="<?=$vv->varName?>"
+                type="text"
+                value="<?=$value->format("Y/m/d h:i:s")?>">
             <button class="btn" type="button"><i class="icon-calendar"></i> </button>
         </div>
 
