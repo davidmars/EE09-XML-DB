@@ -91,13 +91,17 @@
             $scriptPath = self::getRealPath($this->path);
 
             if(!$scriptPath){
-                $mess="<div style='font-size:12px;color:#f00;'>
-                Can't find the template :".$this->path."</div>";
-                if($this->caller){
+                $mess="";
+                foreach (self::$rootPaths as $root){
                     $mess.="<div style='font-size:12px;color:#f00;'>
+                    Can't find the template : <span style='color:#666;'>".$root."</span>/".$this->path."<span style='color:#666;'>.php</span></div>";
+                    if($this->caller){
+                        $mess.="<div style='font-size:12px;color:#f00;'>
                     ( called in ".$this->caller->path." )
                     </div>";
+                    }
                 }
+
                 return $mess;
             }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Post id="beatles" created="1359275112" updated="1359617208" description="A Post is an article.">
+<Post id="beatles" created="1359275112" updated="1359620472" description="A Post is an article.">
 
 
 	<name type="String" description="Name of the post"><![CDATA[The beatles]]></name>
