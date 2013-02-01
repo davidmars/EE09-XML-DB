@@ -1,6 +1,6 @@
 <?php
 
-class ModelXml extends GinetteXml
+class ModelXml extends GinetteXml implements GinetteXml_interface
 {
 
 
@@ -29,15 +29,9 @@ class ModelXml extends GinetteXml
      */
     protected function parse()
     {
-
+        parent::parse();
+        traceCode("----parse model-----" . $this->getId());
         $definition = $this->db->getModelDefinition($this->type);
-
-
-        traceCode("----parse-----" . $this->getId());
-
-        //meta
-        $this->created=new DateTime("@".$this->xml->firstChild->getAttribute("created"));
-        $this->updated=new DateTime("@".$this->xml->firstChild->getAttribute("updated"));
 
         //fields
         foreach ($definition->fields as $field) {
@@ -239,6 +233,10 @@ class ModelXml extends GinetteXml
         $n->setAttribute("id", $this->id);
         //$n->setAttributeNode($attrId);
         return $n;
+    }
+
+    public function __toString(){
+        return "Model type:".$this->getType()."; id:".$this->getId();
     }
 
 }

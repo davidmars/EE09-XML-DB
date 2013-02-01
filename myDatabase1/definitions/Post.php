@@ -23,7 +23,7 @@ class Post extends ModelXml
     /**
      * Search a Post by id. If the id is found or if the record is not a Post, will return an Exception error message
      * @param string $id A model unique identifier.
-     * @param ModelXmlDb $database The database where to search.
+     * @param GinetteDb $database The database where to search.
      * @return Post The Post model.
      */
     public static function getById($id,$database)

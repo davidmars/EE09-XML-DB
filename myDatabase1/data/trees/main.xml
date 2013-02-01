@@ -1,7 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Tree>
+<GinetteTree id="main" created="60" updated="now">
     <Post id="bands">
-        <Post id="beatles"/>
-        <Post id="queen"/>
+        <Post id="beatles">
+            <Post id="queen"/>
+            <Post id="queen"/>
+            <Post id="queen"/>
+            <Post id="queen"/>
+            <Post id="queen"/>
+            <Post id="queen"/>
+            <Post id="queen"/>
+            <Post id="queen"/>
+        </Post>
+        <Post id="queen">
+            <Post id="beatles"/>
+            <Post id="beatles"/>
+            <Post id="beatles"/>
+            <Post id="beatles">
+                <Post id="queen"/>
+                <Post id="queen"/>
+                <Post id="queen"/>
+                <Post id="beatles">
+                    <Post id="queen"/>
+                    <Post id="queen"/>
+                    <Post id="queen"/>
+                    <Post id="beatles">
+                        <Post id="queen"/>
+                        <Post id="queen"/>
+                        <Post id="queen"/>
+                        <Post id="beatles">
+                            <Post id="queen"/>
+                            <Post id="queen"/>
+                            <Post id="queen"/>
+                            <Post id="beatles">
+                                <Post id="queen"/>
+                                <Post id="queen"/>
+                                <Post id="queen"/>
+                                <Post id="beatles">
+                                    <Post id="queen"/>
+                                    <Post id="queen"/>
+                                    <Post id="queen"/>
+                                    <Post id="queen"/>
+                                    <Post id="queen"/>
+                                    <Post id="queen"/>
+                                    <Post id="queen"/>
+                                    <Post id="queen"/>
+                                </Post>
+                                <Post id="queen"/>
+                                <Post id="queen"/>
+                                <Post id="queen"/>
+                                <Post id="queen"/>
+                            </Post>
+                            <Post id="queen"/>
+                            <Post id="queen"/>
+                            <Post id="queen"/>
+                            <Post id="queen"/>
+                        </Post>
+                        <Post id="queen"/>
+                        <Post id="queen"/>
+                        <Post id="queen"/>
+                        <Post id="queen"/>
+                    </Post>
+                    <Post id="queen"/>
+                    <Post id="queen"/>
+                    <Post id="queen"/>
+                    <Post id="queen"/>
+                </Post>
+                <Post id="queen"/>
+                <Post id="queen"/>
+                <Post id="queen"/>
+                <Post id="queen"/>
+            </Post>
+            <Post id="beatles"/>
+            <Post id="beatles"/>
+            <Post id="beatles"/>
+            <Post id="beatles"/>
+            <Post id="beatles"/>
+        </Post>
     </Post>
-</Tree>
+</GinetteTree>

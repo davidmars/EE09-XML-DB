@@ -8,7 +8,7 @@
  */
 
 include "includes.php";
-$db=new ModelXmlDb("myDatabase1");
+$db=new GinetteDb("myDatabase1");
 
 echo "<h1>New Image</h1>";
 

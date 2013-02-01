@@ -4,7 +4,7 @@ class GinetteXml
 {
     /**
      * The database where is recorded this object
-     * @var ModelXmlDb
+     * @var GinetteDb
      */
     public $db;
 
@@ -40,12 +40,12 @@ class GinetteXml
     /**
      * @var DateTime
      */
-    protected $created;
+    //protected $created;
 
     /**
      * @var DateTime
      */
-    protected $updated;
+    //protected $updated;
 
     /**
      * @return \DateTime
@@ -70,10 +70,10 @@ class GinetteXml
 
     /**
      * @param string $id The id of the record. If you create a new model from scratch this id has to be unused.
-     * @param $db ModelXmlDb
+     * @param $db GinetteDb
      * @throws Exception
      */
-    public function __construct($id,ModelXmlDb $db)
+    public function __construct($id,GinetteDb $db)
     {
         $this->db=$db;
         $rc = new ReflectionClass($this);
@@ -119,6 +119,7 @@ class GinetteXml
      */
     public function __get($field)
     {
+        trace("magic ____________________get");
         if (!$this->parsed) {
             $this->parse();
         }
@@ -134,6 +135,12 @@ class GinetteXml
             $this->parse();
         }
         $this->$field=$val;
+    }
+
+    protected function parse(){
+        $this->parsed=true;
+        $this->created=DateAndTime::fromString($this->xml->firstChild->getAttribute("created"));
+        $this->updated=DateAndTime::fromString($this->xml->firstChild->getAttribute("updated"));
     }
 
 }

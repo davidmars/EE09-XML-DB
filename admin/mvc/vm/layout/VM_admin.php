@@ -9,7 +9,7 @@
 class VM_admin extends ViewVariables
 {
     /**
-     * @var ModelXmlDb
+     * @var GinetteDb
      */
     public static $db;
 

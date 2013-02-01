@@ -9,13 +9,13 @@
 class C_admin
 {
     /**
-     * @var ModelXmlDb $db
+     * @var GinetteDb $db
      */
     public $db;
 
     public function __construct(){
         //open the database
-        $this->db=new ModelXmlDb("../myDatabase1");
+        $this->db=new GinetteDb("../myDatabase1");
         VM_admin::$db=$this->db;
     }
 }

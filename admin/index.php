@@ -15,7 +15,7 @@ $autoLoader->addPath("mvc/c");
 //add admin template views
 View::$rootPaths[]=__DIR__."/mvc/v";
 
-//require_once("../core/ModelXmlDb.php");
+//require_once("../core/GinetteDb.php);
 TraceConf::$doTrace=false;
 
 //search and run controller...

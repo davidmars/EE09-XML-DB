@@ -3,7 +3,7 @@
 /**
  *
  */
-class ModelXmlDb
+class GinetteDb
 {
     /**
      * @var string Where are the data?
@@ -18,10 +18,20 @@ class ModelXmlDb
      */
     private $dataPath;
     /**
+     * @var string where are the trees?
+     */
+    private $treesPath;
+    /**
      * @var M_fieldManager[]
      */
     public $definitions = array();
 
+    /**
+     * @return string The framework directory where are the xml templates.
+     */
+    public static function getTemplatesPath(){
+        return __DIR__."/xmlTemplates";
+    }
     /**
      * @var string Path to the database relative to the main php file. Useful to get web url
      */
@@ -36,8 +46,7 @@ class ModelXmlDb
         require_once(__DIR__). "/utils/ClassAutoLoader.php";
         $autoLoader=new ClassAutoLoader();
         $autoLoader->addPath(__DIR__,true);
-
-        //code generation
+        //code generation templates
         View::$rootPaths[]=__DIR__."/mvc/v";
 
 
@@ -45,6 +54,7 @@ class ModelXmlDb
         //set directories
         $this->rootPath = $rootPath;
         $this->dataPath = $this->rootPath . "/data";
+        $this->treesPath = $this->rootPath . "/data/trees";
         $this->definitionsPath = $this->rootPath . "/definitions";
 
         $this->performTests();
@@ -60,6 +70,18 @@ class ModelXmlDb
     public function modelExists($id){
         if(file_exists($this->getModelXmlUrl($id))){
            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Test if a tree with the given id exists
+     * @param string $id
+     * @return bool true if it exists elsewhere false.
+     */
+    public function treeExists($id){
+        if(file_exists($this->getTreeXmlUrl($id))){
+            return true;
         }
         return false;
     }
@@ -146,15 +168,27 @@ class ModelXmlDb
         return $this->definitions[$modelName];
     }
 
+    /**
+     * @param $modelId
+     * @return string
+     */
     public function getModelXmlUrl($modelId)
     {
         return $this->dataPath . "/$modelId.xml";
+    }
+    public function getTreeXmlUrl($treeId)
+    {
+        return $this->treesPath . "/$treeId.xml";
     }
 
     /**
      * @var ModelXml[] Here are the models which have been loaded. This array prevent multiple model references.
      */
     private $modelReferences = array();
+    /**
+     * @var GinetteTree[] Here are the trees which have been loaded. This array prevent multiple tree references.
+     */
+    private $treeReferences = array();
 
     /**
      * @param string $modelId The model to find
@@ -177,6 +211,28 @@ class ModelXmlDb
         $this->modelReferences[$modelId] = $item;
         return $item;
     }
+    /**
+     * @param string $treeId The tree to find
+     * @return GinetteTree The related tree. If not found, will return null.
+     */
+    public function getTreeById($treeId)
+    {
+        //yet loaded?
+        if (isset($this->treeReferences[$treeId])) {
+            return $this->treeReferences[$treeId];
+        }
+        //else...load xml
+        $file = $this->getTreeXmlUrl($treeId);
+        if (!file_exists($file)) {
+            return null;
+        }
+        $xml = new DOMDocument();
+        $xml->load($file);
+        $item = $this->fromXml($xml);
+        $this->treeReferences[$treeId] = $item;
+        return $item;
+    }
+
 
     /**
      * Return list of models
@@ -212,6 +268,7 @@ class ModelXmlDb
             $_id->setValue($model,$id);
             $_id->setAccessible(false);
             $model->xml=$xml;
+            traceCode("From xml ".$xml->firstChild->nodeName);
             return $model;
         } else {
             return null;
