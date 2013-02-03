@@ -8,14 +8,14 @@
  * @property FileImage $file Well, the image file itself
  *
  */
-class Image extends ModelXml
+class Image extends GinetteRecord
 {
 
 
     /**
      * Search a Image by id. If the id is found or if the record is not a Image, will return an Exception error message
      * @param string $id A model unique identifier.
-     * @param ModelXmlDb $database The database where to search.
+     * @param GinetteDb $database The database where to search.
      * @return Image The Image model.
      */
     public static function getById($id,$database)

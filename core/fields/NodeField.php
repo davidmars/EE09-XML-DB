@@ -15,7 +15,7 @@ class NodeField
 
     /**
      * @param $node DOMElement
-     * @param $model ModelXml
+     * @param $model GinetteRecord
      */
     public function __construct($node=null,$model=null){
         if($node){
@@ -25,7 +25,7 @@ class NodeField
     }
 
     /**
-     * @var ModelXml
+     * @var GinetteRecord
      */
     public $model;
     /**

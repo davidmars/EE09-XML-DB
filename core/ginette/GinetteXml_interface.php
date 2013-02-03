@@ -13,4 +13,9 @@ interface GinetteXml_interface
      */
     public function save();
 
+    /**
+     * @return mixed
+     */
+    public function delete();
+
 }

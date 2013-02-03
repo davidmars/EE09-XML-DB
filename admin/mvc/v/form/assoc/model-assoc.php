@@ -8,7 +8,7 @@
 /* @var $this View */
 /* @var $vv VM_form_element */
 $vv = $_vars;
-/** @var $value ModelXml */
+/** @var $value GinetteRecord */
 $value=$vv->value;
 ?>
 <div class="control-group">

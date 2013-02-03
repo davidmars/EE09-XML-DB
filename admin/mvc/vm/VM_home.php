@@ -9,7 +9,7 @@
 class VM_home extends VM_admin
 {
     /**
-     * @param ModelXml $model
+     * @param GinetteRecord $model
      */
     public function __construct(){
 

@@ -1,9 +1,11 @@
 <?php
-
-class ModelXml extends GinetteXml implements GinetteXml_interface
+/**
+ * A Record is for sure what you need at least...at least? NO.
+ * At least you need something that is a record but extended.
+ *
+ */
+class GinetteRecord extends GinetteXml implements GinetteXml_interface
 {
-
-
     /**
      * Return a FileImage field object that best represents the record.
      * If the record has a FileImage field and this one is not null, it will be returned.
@@ -29,15 +31,11 @@ class ModelXml extends GinetteXml implements GinetteXml_interface
      */
     protected function parse()
     {
-        parent::parse();
-        traceCode("----parse model-----" . $this->getId());
+
         $definition = $this->db->getModelDefinition($this->type);
 
         //fields
         foreach ($definition->fields as $field) {
-
-            traceCode("Parse and set field " . $field->varName." (".$field->type.")");
-
             /** @var string $fieldName name of the property */
             $fieldName = $field->varName;
             $fieldType = $field->type;
@@ -47,7 +45,6 @@ class ModelXml extends GinetteXml implements GinetteXml_interface
             $node = XmlUtils::getFirst($this->xml, $fieldName);
             if (!$node) {
                 //well the original xml hasn't the node...probably because the model structure has been updated, so we add it.
-                traceError("node <i>" . $fieldName . "</i> not found in original xml");
                 $node = $field->node->cloneNode(true);
                 $node = $this->xml->importNode($node);
                 $this->xml->firstChild->appendChild($node);
@@ -118,7 +115,7 @@ class ModelXml extends GinetteXml implements GinetteXml_interface
 
 
         }
-        traceCode("----end parse-----" . $this->getId());
+        parent::parse();
         $this->parsed = true;
     }
 
@@ -127,11 +124,9 @@ class ModelXml extends GinetteXml implements GinetteXml_interface
      */
     public function save()
     {
-        traceCode("--------save " .$this->id."------------");
 
         //update refresh
         $this->updated->setTimestamp(time());
-
 
         $definition = $this->db->getModelDefinition($this->type);
 
@@ -146,7 +141,6 @@ class ModelXml extends GinetteXml implements GinetteXml_interface
         foreach ($definition->fields as $field) {
 
             $fieldName = $field->varName;
-            traceCode("save field " . $fieldName);
             $node = XmlUtils::getFirst($saveXml, $fieldName);
             switch ($field->type) {
                 case "String":
@@ -182,7 +176,7 @@ class ModelXml extends GinetteXml implements GinetteXml_interface
                         //relation to MANY models of a certain type
                         XmlUtils::emptyNode($node);
                         $arr=$this->$fieldName;
-                        /** @var ModelXml $m */
+                        /** @var GinetteRecord $m */
                         foreach($arr as $m){
                             if($m->getType()==$field->arrayType){
                                 $newNode=$saveXml->createElement($m->getType());
@@ -192,7 +186,6 @@ class ModelXml extends GinetteXml implements GinetteXml_interface
                         }
 
                     }else{
-                        traceError("unknow field type for " . $this->$fieldName);
                         $node->nodeValue = $this->$fieldName;
                     }
 

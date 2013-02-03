@@ -1,6 +1,6 @@
 <?php
 /**
- * editModel is a View template. It works with a ModelXml object.
+ * editModel is a View template. It works with a GinetteRecord object.
  * The form to edit a model
  *
  */

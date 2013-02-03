@@ -39,4 +39,45 @@ class XmlUtils
         }
     }
 
+    /**
+     * Load an xml and returns it.
+     * @param string $url
+     * @return DOMDocument
+     */
+    public static function load($url){
+        $x=new DOMDocument();
+        $x->preserveWhiteSpace=false;
+        $x->load($url);
+        return $x;
+    }
+
+    /**
+     * If $url do not exists create it. In both case return the xml doc Return it.
+     * @param $url
+     * @return DOMDocument
+     */
+    public static function loadOrCreate($url,$rootNodeName="data"){
+        if(is_file($url)){
+            return self::load($url);
+        }else{
+            $x=new DOMDocument();
+            $rootNode=$x->createElement($rootNodeName);
+            $x->appendChild($rootNode);
+            $x->preserveWhiteSpace=false;
+            $x->save($url);
+            return $x;
+        }
+
+    }
+
+    /**
+     * Save an xml doc.
+     * @param DOMDocument $xmlDoc
+     * @param string $url Where to save it?
+     */
+    public static function save($xmlDoc,$url){
+       $xmlDoc->formatOutput=true;
+       $xmlDoc->save($url);
+    }
+
 }

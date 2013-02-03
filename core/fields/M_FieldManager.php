@@ -73,13 +73,13 @@ class M_fieldManager
         }
         $f->editor=$node->getAttribute("editor");
 
-        if(class_exists($f->type) && in_array("ModelXml",class_parents($f->type))){
+        if(class_exists($f->type) && in_array("GinetteRecord",class_parents($f->type))){
             //a single model reference
             $f->isAModelReference=true;
         }else if(preg_match("#^(.*)".preg_quote("[]")."$#",$f->type,$extr)){
             //a multiple model reference (typed array)
             $arrayType=$extr[1];
-            if(class_exists($arrayType) && in_array("ModelXml",class_parents($arrayType))){
+            if(class_exists($arrayType) && in_array("GinetteRecord",class_parents($arrayType))){
                 $f->isArray=true;
                 $f->arrayType=$arrayType;
             }

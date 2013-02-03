@@ -9,7 +9,7 @@
 class VM_record extends ViewVariables
 {
     /**
-     * @var ModelXml
+     * @var GinetteRecord
      */
     public $model;
 
@@ -18,7 +18,7 @@ class VM_record extends ViewVariables
     public $hrefEdit;
 
     /**
-     * @param ModelXml $model
+     * @param GinetteRecord $model
      */
     public function __construct($model){
         $this->model=$model;

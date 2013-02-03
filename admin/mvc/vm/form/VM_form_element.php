@@ -46,7 +46,7 @@ class VM_form_element extends ViewVariables
 
     /**
      * @param M_field $field
-     * @param ModelXml $model
+     * @param GinetteRecord $model
      */
     public function __construct($field,$model){
         $this->field=$field;

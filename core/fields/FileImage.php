@@ -35,7 +35,7 @@ class FileImage extends File
 
     /**
      * @param $node DOMElement
-     * @param ModelXml $model
+     * @param GinetteRecord $model
      */
     public function __construct($node=null,$model=null){
         parent::__construct($node,$model);

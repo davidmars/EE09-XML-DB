@@ -9,7 +9,7 @@
 class C_editModel extends C_admin
 {
     /**
-     * @var ModelXml
+     * @var GinetteRecord
      */
     public $model;
 

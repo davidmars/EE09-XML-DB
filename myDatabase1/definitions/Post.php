@@ -3,10 +3,6 @@
  *
  * A Post is an article.
  *
- * @property String $id The unique identifier
- * @property String $type The model type
- * @property DateTime $created When was created this record
- * @property DateTime $updated When was last updated this record
  * @property String $name Name of the post
  * @property String $description Here is the post quick description
  * @property Image $thumbnail The image that represents this post
@@ -16,7 +12,7 @@
  * @property Post[] $otherPosts A list of Posts, nothing else!
  *
  */
-class Post extends ModelXml
+class Post extends GinetteRecord
 {
 
 

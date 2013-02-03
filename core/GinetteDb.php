@@ -5,33 +5,12 @@
  */
 class GinetteDb
 {
-    /**
-     * @var string Where are the data?
-     */
-    public $rootPath;
-    /**
-     * @var string Where are the definitions?
-     */
-    private $definitionsPath;
-    /**
-     * @var string where are the data?
-     */
-    private $dataPath;
-    /**
-     * @var string where are the trees?
-     */
-    private $treesPath;
+
     /**
      * @var M_fieldManager[]
      */
     public $definitions = array();
 
-    /**
-     * @return string The framework directory where are the xml templates.
-     */
-    public static function getTemplatesPath(){
-        return __DIR__."/xmlTemplates";
-    }
     /**
      * @var string Path to the database relative to the main php file. Useful to get web url
      */
@@ -43,19 +22,20 @@ class GinetteDb
     {
 
         //include core files
-        require_once(__DIR__). "/utils/ClassAutoLoader.php";
+        require_once(__DIR__) . "/utils/ClassAutoLoader.php";
         $autoLoader=new ClassAutoLoader();
         $autoLoader->addPath(__DIR__,true);
+
         //code generation templates
         View::$rootPaths[]=__DIR__."/mvc/v";
 
 
 
         //set directories
-        $this->rootPath = $rootPath;
-        $this->dataPath = $this->rootPath . "/data";
-        $this->treesPath = $this->rootPath . "/data/trees";
-        $this->definitionsPath = $this->rootPath . "/definitions";
+        $this->paths=new GinetteDbPaths($rootPath,__DIR__);
+
+        //...and auto load the php classes relatives to THIS database :)
+        $autoLoader->addPath($this->paths->definitions,true);
 
         $this->performTests();
         //boot the database
@@ -90,15 +70,16 @@ class GinetteDb
      * performs some basics tests and die with message if fails.
      */
     private function performTests(){
-        if(!is_dir($this->rootPath)){
-            die("Error opening database : ".$this->rootPath." is not a valid directory");
+        if(!is_dir($this->paths->root)){
+            die("Error opening database : ".$this->paths->root." is not a valid directory");
         }
-        if(!is_dir($this->dataPath)){
-            die("Error opening database : ".$this->dataPath." is not a valid directory");
+        if(!is_dir($this->paths->records)){
+            die("Error opening database : ".$this->paths->records." is not a valid directory");
         }
-        if(!is_dir($this->definitionsPath)){
-            die("Error opening database : ".$this->definitionsPath." is not a valid directory");
+        if(!is_dir($this->paths->definitions)){
+            die("Error opening database : ".$this->paths->definitions." is not a valid directory");
         }
+
     }
 
     /**
@@ -106,26 +87,13 @@ class GinetteDb
      */
     private function bootDefinitions()
     {
-
-        //first include classes
-        foreach (scandir($this->definitionsPath) as $file) {
-            $f = $this->definitionsPath . "/" . $file;
-            if (is_file($f)) {
-                if (preg_match("#(.*)\.php$#", $file, $matches)) {
-                    $modelName = $matches[1];
-                    require_once($this->definitionsPath . "/$modelName.php");
-                    traceCode("boot $modelName.php");
-                }
-            }
-        }
         //then load definitions (after, because we need model classes for associations fields)
-        foreach (scandir($this->definitionsPath) as $file) {
-            $f = $this->definitionsPath . "/" . $file;
+        foreach (scandir($this->paths->definitions) as $file) {
+            $f = $this->paths->definitions . "/" . $file;
             if (is_file($f)) {
                 $modelName=$this->extractNameXml($file);
                 if ($modelName) {
                     $this->bootModel($modelName);
-                    traceCode("boot $modelName.xml");
                 }
             }
         }
@@ -135,7 +103,7 @@ class GinetteDb
      * @param string $file A file name (without path).
      * @return bool|string If not an xml will return false else will return the file name without extension.
      */
-    private function extractNameXml($file){
+    public function extractNameXml($file){
         if (preg_match("#(.*)\.xml#", $file, $matches)) {
             return $matches[1];
         }
@@ -149,13 +117,15 @@ class GinetteDb
     {
         //loads the xml
         $xml = new DOMDocument();
-        $xml->load($this->definitionsPath . "/" . $modelName . ".xml");
+        $xml->preserveWhiteSpace=false;
+        $xml->load($this->paths->definitions . "/" . $modelName . ".xml");
+
         $this->definitions[$modelName] = new M_fieldManager($xml);
 
         //php gen
         $view=new View("class/modelXml",$this->definitions[$modelName]);
         $code=$view->render();
-        file_put_contents($this->definitionsPath."/generated/".$modelName."__gen.php",$code);
+        file_put_contents($this->paths->definitions."/generated/".$modelName."__gen.php",$code);
     }
 
     /**
@@ -164,7 +134,6 @@ class GinetteDb
      */
     public function getModelDefinition($modelName)
     {
-        traceCode("getDefinition ".$modelName);
         return $this->definitions[$modelName];
     }
 
@@ -174,15 +143,15 @@ class GinetteDb
      */
     public function getModelXmlUrl($modelId)
     {
-        return $this->dataPath . "/$modelId.xml";
+        return $this->paths->records . "/$modelId.xml";
     }
     public function getTreeXmlUrl($treeId)
     {
-        return $this->treesPath . "/$treeId.xml";
+        return $this->paths->trees . "/$treeId.xml";
     }
 
     /**
-     * @var ModelXml[] Here are the models which have been loaded. This array prevent multiple model references.
+     * @var GinetteRecord[] Here are the models which have been loaded. This array prevent multiple model references.
      */
     private $modelReferences = array();
     /**
@@ -192,7 +161,7 @@ class GinetteDb
 
     /**
      * @param string $modelId The model to find
-     * @return ModelXml The related model. If not found, will return null.
+     * @return GinetteRecord The related model. If not found, will return null.
      */
     public function getModelById($modelId)
     {
@@ -201,16 +170,27 @@ class GinetteDb
             return $this->modelReferences[$modelId];
         }
         //else...load xml
-        $file = $this->getModelXmlUrl($modelId);
-        if (!file_exists($file)) {
-            return null;
-        }
-        $xml = new DOMDocument();
-        $xml->load($file);
+        $xml=$this->loadRecordXml($modelId);
         $item = $this->fromXml($xml);
         $this->modelReferences[$modelId] = $item;
         return $item;
     }
+    public function getLightModel($type,$modelId){
+        if (isset($this->modelReferences[$modelId])) {
+            return $this->modelReferences[$modelId];
+        }
+        $item=new $type($modelId,$this);
+    }
+    public function loadRecordXml($id){
+        $file = $this->getModelXmlUrl($id);
+        if (!file_exists($file)) {
+            //throw new Exception("model node found");
+            return false;
+        }
+        $xml = XmlUtils::load($file);
+        return $xml;
+    }
+
     /**
      * @param string $treeId The tree to find
      * @return GinetteTree The related tree. If not found, will return null.
@@ -227,7 +207,9 @@ class GinetteDb
             return null;
         }
         $xml = new DOMDocument();
+        $xml->preserveWhiteSpace=false;
         $xml->load($file);
+
         $item = $this->fromXml($xml);
         $this->treeReferences[$treeId] = $item;
         return $item;
@@ -236,31 +218,46 @@ class GinetteDb
 
     /**
      * Return list of models
-     * @return ModelXml[]
+     * @return GinetteRecord[]
      */
     public function getModelList(){
         $arr=array();
-        foreach(scandir($this->dataPath) as $f){
-            $file=$this->dataPath."/".$f;
+        $index=new GinetteDbIndex($this);
+        $all=$index->allRecords->firstChild;
+        for($i=0;$i<$all->childNodes->length;$i++){
+            /** @var DOMElement $n  */
+            $n=$all->childNodes->item($i);
+            $modelType=$n->nodeName;
+            $id=$n->getAttribute("id");
+            //$arr[]=$this->getModelById($id);
+
+            $arr[]=$modelType::getById($id,$this);
+        }
+
+        /*
+        foreach(scandir($this->recordsPath) as $f){
+            $file=$this->recordsPath."/".$f;
             $modelName=$this->extractNameXml($f);
             if(is_file($file) && $modelName){
                 $arr[]=$this->getModelById($modelName);
             }
         }
+        */
         return $arr;
     }
 
     /**
      * Return a model from a DOMDocument xml object
      * @param DOMDocument $xml
-     * @return ModelXml The model object. In fact it will be a typed model according to xml type value, not a generic ModelXML object.
+     * @throws Exception
+     * @return GinetteRecord The model object. In fact it will be a typed model according to xml type value, not a generic ModelXML object.
      */
     private function fromXml($xml)
     {
         $type = $xml->firstChild->nodeName;
         $id = $xml->firstChild->getAttribute("id");
         if (class_exists($type)) {
-            /** @var $model ModelXml */
+            /** @var $model GinetteRecord */
             $model = new $type("FROM_DB_HACK",$this);
             $rc=new ReflectionClass($type);
             $_id=$rc->getProperty("id");
@@ -268,16 +265,19 @@ class GinetteDb
             $_id->setValue($model,$id);
             $_id->setAccessible(false);
             $model->xml=$xml;
-            traceCode("From xml ".$xml->firstChild->nodeName);
             return $model;
         } else {
-            return null;
+            throw new Exception("Ginette t'engueule ptit con! FromXml error! there is no class $type");
         }
     }
 
     public function deleteModel($id)
     {
         //TODO::write this class
+    }
+
+    public function __toString(){
+        return "GinetteDb rootPath : ".$this->paths->root;
     }
 
 }

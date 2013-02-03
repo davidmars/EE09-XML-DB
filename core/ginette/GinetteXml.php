@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @property DOMDocument $xml The xml storage related to this record
+ */
 class GinetteXml
 {
     /**
@@ -12,7 +14,7 @@ class GinetteXml
      * The xml storage related to this record
      * @var DOMDocument
      */
-    public $xml;
+    //public $xml;
 
     /**
      * @var string The identifier of this model, it is also the xml storage file name
@@ -76,10 +78,11 @@ class GinetteXml
     public function __construct($id,GinetteDb $db)
     {
         $this->db=$db;
+        $this->type=get_class($this);
+        /*
         $rc = new ReflectionClass($this);
         $this->type = $rc->getName();
-        traceCode("-----------------------------------------------construct a new " . $this->type."-----------");
-
+        */
         if($id!="FROM_DB_HACK"){
             //it is a real new model
             if($this->db->modelExists($id)){
@@ -107,9 +110,6 @@ class GinetteXml
 
         }
 
-        traceCode("-----------------------------------------------construct end " . $this->type."-----------");
-
-
     }
 
     /**
@@ -119,9 +119,14 @@ class GinetteXml
      */
     public function __get($field)
     {
-        trace("magic ____________________get");
-        if (!$this->parsed) {
+        if($field=="xml"){
+            $this->xml=$this->db->loadRecordXml($this->id);
+        }else if(!$this->parsed) {
             $this->parse();
+        }else{
+            throw new Exception("Ginette say :
+            Allons bon...
+            There is no field $field in a ".$this->type);
         }
         return $this->$field;
     }
@@ -131,16 +136,25 @@ class GinetteXml
      */
     public function __set($field,$val)
     {
-        if (!$this->parsed) {
+        if($field=="xml"){
+            $this->xml=$val;
+        }else if (!$this->parsed) {
             $this->parse();
+            //$this->$field=$val;
+        }else{
+            throw new Exception("Ginette say : Mais nooon...
+            You tried to set an undefined field.
+            There is no field $field in a ".$this->type);
         }
-        $this->$field=$val;
+
     }
 
     protected function parse(){
-        $this->parsed=true;
+
+        //traceError($this->xml->firstChild->nodeName);
         $this->created=DateAndTime::fromString($this->xml->firstChild->getAttribute("created"));
         $this->updated=DateAndTime::fromString($this->xml->firstChild->getAttribute("updated"));
+        $this->parsed=true;
     }
 
 }

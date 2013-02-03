@@ -9,7 +9,7 @@
 class VM_record_list extends ViewVariables
 {
     /**
-     * @param ModelXml[] $models
+     * @param GinetteRecord[] $models
      */
     public function __construct($models){
         foreach($models as $record){

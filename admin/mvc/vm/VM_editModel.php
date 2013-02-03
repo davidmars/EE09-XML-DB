@@ -9,11 +9,11 @@
 class VM_editModel extends VM_admin
 {
     /**
-     * @var ModelXml The currently edited record
+     * @var GinetteRecord The currently edited record
      */
     public static $current;
     /**
-     * @var ModelXml
+     * @var GinetteRecord
      */
     public $model;
     /**
@@ -21,7 +21,7 @@ class VM_editModel extends VM_admin
      */
     public $definition;
     /**
-     * @param ModelXml $model
+     * @param GinetteRecord $model
      */
     public function __construct($model){
         self::$current=$model;

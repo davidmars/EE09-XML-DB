@@ -17,7 +17,6 @@ class DateAndTime
         if(is_numeric($str)){
             $val="@".$str;
         }
-        traceCode($val);
         return new DateTime($val);
     }
 }

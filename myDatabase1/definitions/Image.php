@@ -3,16 +3,12 @@
  *
  * An image model is related to a file which is an Image...great :\ . It has extra information
  *
- * @property String $id The unique identifier
- * @property String $type The model type
- * @property DateTime $created When was created this record
- * @property DateTime $updated When was last updated this record
  * @property String $title Title of the image, will be useful for alt
  * @property String $legend Here is the post quick description
  * @property FileImage $file Well, the image file itself
  *
  */
-class Image extends ModelXml
+class Image extends GinetteRecord
 {
 
 

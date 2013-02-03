@@ -1,12 +1,12 @@
 <?php
 /**
- * medium is a View template. It works with a ModelXml object.
+ * medium is a View template. It works with a GinetteRecord object.
  * A medium preview
  *
  */
 
 /* @var $this View */
-/* @var $vv ModelXml */
+/* @var $vv GinetteRecord */
 $vv = $_vars;
 ?>
 

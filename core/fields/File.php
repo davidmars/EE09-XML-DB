@@ -35,7 +35,7 @@ class File extends NodeField
     public function getUrl($resolvePath=true)
     {
         if($resolvePath){
-            return $this->model->db->rootPath."/".$this->url;
+            return $this->model->db->paths->root."/".$this->url;
         }
         return $this->url;
     }
@@ -61,7 +61,7 @@ class File extends NodeField
     public function exists(){
 
 
-        $r=file_exists($this->model->db->rootPath."/".$this->url);
+        $r=file_exists($this->model->db->paths->root."/".$this->url);
         return $r;
     }
 
@@ -71,7 +71,7 @@ class File extends NodeField
 
     /**
      * @param $node DOMElement
-     * @param ModelXml $model
+     * @param GinetteRecord $model
      */
     public function __construct($node=null,$model=null){
         parent::__construct($node,$model);
