@@ -1,6 +1,7 @@
 <?php
 /**
  * @property DOMDocument $xml The xml storage related to this record
+ *
  */
 class GinetteXml
 {
@@ -75,40 +76,24 @@ class GinetteXml
      * @param $db GinetteDb
      * @throws Exception
      */
-    public function __construct($id,GinetteDb $db)
+    public function __construct($id,GinetteDb $db=null)
     {
-        $this->db=$db;
-        $this->type=get_class($this);
-        /*
-        $rc = new ReflectionClass($this);
-        $this->type = $rc->getName();
-        */
-        if($id!="FROM_DB_HACK"){
-            //it is a real new model
-            if($this->db->modelExists($id)){
-                throw new Exception("You tried to create a new ".$this->type." with the id ".$id." but this id is already used by an other record.
-            Try an other id or delete the $id record. Ciao!");
-            }
-
-            //okay...it is a real new model
-
-            //set the id
-            $this->id=$id;
-
-            //set the xml from the structure
-            $definition=$db->getModelDefinition($this->type);
-            $this->xml = $definition->xml->cloneNode(true);
-            /** @var $root DOMElement */
-            $root=$this->xml->firstChild;
-            $root->setAttribute("id",$this->id);
-            $root->setAttribute("created",time());
-            $root->setAttribute("updated",time());
-
-            $this->parse();
-            $this->save();
 
 
+
+        //set the db
+        if($db===null){
+           $db=GinetteDb::current();
         }
+        $this->db=$db;
+
+        //set the type
+        $type=$this->type=get_class($this);
+        //set the id
+        $this->id=$id;
+
+        //$back=debug_backtrace();
+        //traceCode("__construct $id $type ".$back[0]["file"]." line ".$back[0]["line"]);
 
     }
 
@@ -119,6 +104,7 @@ class GinetteXml
      */
     public function __get($field)
     {
+        traceCode("__get $field in ".$this->id);
         if($field=="xml"){
             $this->xml=$this->db->loadRecordXml($this->id);
         }else if(!$this->parsed) {

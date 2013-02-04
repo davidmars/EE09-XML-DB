@@ -35,12 +35,50 @@ class GinetteDbIndex
         $dir=$this->db->paths->records."/";
         foreach(scandir($dir) as $f){
             $file=$dir.$f;
-            $modelName=$this->db->extractNameXml($f);
-            if(is_file($file) && $modelName){
-                $arr[]=$this->db->getModelById($modelName);
+            $id=$this->db->extractNameXml($f);
+            if(is_file($file) && $id){
+                $r=$this->db->getModelById($id);
+                $xml=$this->db->loadRecordXml($id);
+                $type=$xml->firstChild->nodeName;
+                $arr[]=new $type($id,$this->db);
+
+
             }
         }
         return $arr;
+    }
+
+    /**
+     * Add a record to the index
+     * @param GinetteRecord $record
+     */
+    public function add($record){
+        $n=$this->allRecords->createElement($record->getType());
+        $n->setAttribute("id",$record->getId());
+        $this->allRecords->firstChild->appendChild($n);
+        XmlUtils::save($this->allRecords,$this->allRecordsUrl);
+    }
+
+    /**
+     * searching in the index return a GinetteRecord
+     * @param string $id
+     * @return GinetteRecord
+     */
+    public function getRecord($id){
+        $xp=new DOMXPath($this->allRecords);
+        $results=$xp->query("/Records/*[@id='$id']");
+        if($results->length==1){
+            $node=$results->item(0);
+            $type=$node->nodeName;
+            return $this->db->recordInstance($id,$type);
+        }else{
+            return false;
+        }
+
+    }
+
+    public function getList(){
+
     }
 
     /**

@@ -12,19 +12,29 @@ class toolsGinetteTree
      * @return \GinetteBranch|null
      */
     public static function fromNode(GinetteTree $tree,DOMElement $node){
-        $idModel=$node->getAttribute("id");
-        $model=$tree->db->getModelById($idModel);
+        $idRecord=$node->getAttribute("id");
+        $typeRecord=$node->nodeName;
+        if($tree->db->modelExists($idRecord)){
+            $model=$tree->db->recordInstance($idRecord,$typeRecord);
+            //okay...
+            $branch=new GinetteBranch($tree);
+            $branch->model=$model;
+            $branch->xml=$node;
+            return $branch;
+        }else{
+
+            return false;
+        }
+        /*
         if(!$model){
             throw new Exception("Ginette says :
             Va te rouler!
             Impossible to create this branch,
             there is no model '$idModel'");
         }
-        //okay...
-        $branch=new GinetteBranch($tree);
-        $branch->model=$model;
-        $branch->xml=$node;
+        */
 
-        return $branch;
+
+
     }
 }

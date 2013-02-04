@@ -40,6 +40,11 @@ class GinetteBranchArray extends ArrayObject
                 if($branch){
                     $array[]=$branch;
                     //$ret[]=$branch;
+                }else{
+                    $comment=$this->xml->ownerDocument->createComment($this->xml->ownerDocument->saveXML($n));
+                    $this->xml->appendChild($comment);
+                    $this->xml->removeChild($n); //remove the node
+
                 }
             }
         }

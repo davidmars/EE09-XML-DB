@@ -5,7 +5,25 @@
  */
 class GinetteDb
 {
+    /**
+     * @var GinetteDb[] Here a instances of the databases. If only one is set then database argument will be optional.
+     */
+    private static $instances=array();
 
+    /**
+     * If there is only one instance database, this one is returned elsewhere throws an error.
+     * @return GinetteDb The only ONE ginette database you use.
+     * @throws Exception
+     */
+    public static function current(){
+        if(count(self::$instances)==1){
+            return self::$instances[0];
+        }else{
+            throw new Exception("Ginette says :
+            Tu te compliques la vie toi !
+            Database parameter is optional when you play with only ONE database !");
+        }
+    }
     /**
      * @var M_fieldManager[]
      */
@@ -20,6 +38,7 @@ class GinetteDb
      */
     public function __construct($rootPath)
     {
+        self::$instances[]=$this;
 
         //include core files
         require_once(__DIR__) . "/utils/ClassAutoLoader.php";
@@ -40,6 +59,9 @@ class GinetteDb
         $this->performTests();
         //boot the database
         $this->bootDefinitions();
+
+        //
+        $this->index=new GinetteDbIndex($this);
     }
 
     /**
@@ -163,32 +185,90 @@ class GinetteDb
      * @param string $modelId The model to find
      * @return GinetteRecord The related model. If not found, will return null.
      */
-    public function getModelById($modelId)
+    public function getModelById($recordId)
     {
         //yet loaded?
-        if (isset($this->modelReferences[$modelId])) {
-            return $this->modelReferences[$modelId];
+        if (isset($this->modelReferences[$recordId])) {
+            return $this->modelReferences[$recordId];
         }
-        //else...load xml
-        $xml=$this->loadRecordXml($modelId);
-        $item = $this->fromXml($xml);
-        $this->modelReferences[$modelId] = $item;
-        return $item;
-    }
-    public function getLightModel($type,$modelId){
-        if (isset($this->modelReferences[$modelId])) {
-            return $this->modelReferences[$modelId];
+
+        $record=$this->index->getRecord($recordId);
+        if($record){
+            return $record;
         }
-        $item=new $type($modelId,$this);
+        if($record){
+           $xml=$this->loadRecordXml($recordId);
+           $record=$this->fromXml($xml);
+           return $record;
+        }
+        return false;
     }
+
+    /**
+     * If the record is already created returns it else create it, index cache it and return it.
+     * @param string $id
+     * @param string $type
+     * @return GinetteRecord
+     */
+    public function recordInstance($id,$type){
+        if (isset($this->modelReferences[$id])) {
+            return $this->modelReferences[$id];
+        }else{
+            $record=new $type($id,$this);
+            $this->modelReferences[$id]=$record;
+            return $record;
+        }
+    }
+
+
+    /**
+     * loads and return
+     *
+     * @param $id
+     * @return bool|DOMDocument
+     * @throws Exception
+     */
     public function loadRecordXml($id){
         $file = $this->getModelXmlUrl($id);
-        if (!file_exists($file)) {
-            //throw new Exception("model node found");
+        if($this->modelExists($id)){
+            traceCode("load xml $id");
+            $xml = XmlUtils::load($file);
+            return $xml;
+        }else{
+            throw new Exception("model node not found (id=$id)");
             return false;
         }
-        $xml = XmlUtils::load($file);
-        return $xml;
+
+    }
+
+    /**
+     * Create a new record
+     * @param string $id
+     * @param string $type
+     * @return GinetteRecord
+     * @throws Exception
+     */
+    public function createRecord($id,$type){
+        if(class_exists($type)){
+            if(!$this->modelExists($id)){
+                //set the xml from the structure
+                $definition=$this->getModelDefinition($type);
+                $xml = $definition->xml->cloneNode(true);
+                /** @var $root DOMElement */
+                $root=$xml->firstChild;
+                $root->setAttribute("id",$id);
+                $root->setAttribute("created",time());
+                $root->setAttribute("updated",time());
+                XmlUtils::save($xml,$this->paths->records."/$id.xml");
+                $record=$this->recordInstance($id,$type);
+                $this->index->add($record);
+                return $record;
+            }else{
+                throw new Exception("Ginette says : The record '$id' already exists!");
+            }
+        }else{
+            throw new Exception("Ginette says : $type is not a valid record type");
+        }
     }
 
     /**
@@ -206,15 +286,16 @@ class GinetteDb
         if (!file_exists($file)) {
             return null;
         }
-        $xml = new DOMDocument();
-        $xml->preserveWhiteSpace=false;
-        $xml->load($file);
-
+        $xml=XmlUtils::load($file);
         $item = $this->fromXml($xml);
         $this->treeReferences[$treeId] = $item;
         return $item;
     }
 
+    /**
+     * @var GinetteDbIndex
+     */
+    public $index;
 
     /**
      * Return list of models
@@ -222,27 +303,15 @@ class GinetteDb
      */
     public function getModelList(){
         $arr=array();
-        $index=new GinetteDbIndex($this);
-        $all=$index->allRecords->firstChild;
+
+        $all=$this->index->allRecords->firstChild;
         for($i=0;$i<$all->childNodes->length;$i++){
             /** @var DOMElement $n  */
             $n=$all->childNodes->item($i);
-            $modelType=$n->nodeName;
+            $type=$n->nodeName;
             $id=$n->getAttribute("id");
-            //$arr[]=$this->getModelById($id);
-
-            $arr[]=$modelType::getById($id,$this);
+            $arr[]=$this->recordInstance($id,$type);
         }
-
-        /*
-        foreach(scandir($this->recordsPath) as $f){
-            $file=$this->recordsPath."/".$f;
-            $modelName=$this->extractNameXml($f);
-            if(is_file($file) && $modelName){
-                $arr[]=$this->getModelById($modelName);
-            }
-        }
-        */
         return $arr;
     }
 
@@ -258,12 +327,7 @@ class GinetteDb
         $id = $xml->firstChild->getAttribute("id");
         if (class_exists($type)) {
             /** @var $model GinetteRecord */
-            $model = new $type("FROM_DB_HACK",$this);
-            $rc=new ReflectionClass($type);
-            $_id=$rc->getProperty("id");
-            $_id->setAccessible(true);
-            $_id->setValue($model,$id);
-            $_id->setAccessible(false);
+            $model = $this->recordInstance($id,$type);
             $model->xml=$xml;
             return $model;
         } else {

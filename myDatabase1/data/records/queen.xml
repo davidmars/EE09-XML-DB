@@ -1,18 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Post id="queen" created="1359363720" updated="1359694332" description="A Post is an article.">
-
-
-	<name type="String" description="Name of the post"><![CDATA[Queen]]></name>
-	<description type="String" editor="text-area" description="Here is the post quick description"><![CDATA[Queen est un groupe de musique]]></description>
-
-    <thumbnail type="Image" description="The image that represents this post"><Image/></thumbnail>
-
-    <download type="File" description="An attached file to the post" mime="" fileSize="0" url=""/>
-
-    <seeAlso type="Association"/>
-
-    <otherPost type="Post"><Post id="queen"/></otherPost>
-
-    <otherPosts type="Post[]" description="A list of Posts, nothing else!"><Post id="bbbbbbb"/></otherPosts>
-
-</Post>
+<Post id="queen" created="1359363720" updated="1359939297" description="A Post is an article."><name type="String" description="Name of the post"><![CDATA[Queen]]></name><description type="String" editor="text-area" description="Here is the post quick description"><![CDATA[Queen est un groupe de musique]]></description><thumbnail type="Image" description="The image that represents this post"><Image/></thumbnail><download type="File" description="An attached file to the post" mime="" fileSize="0" url=""/><seeAlso type="Association"/><otherPost type="Post"><Post id="queen"/></otherPost><otherPosts type="Post[]" description="A list of Posts, nothing else!"><Post id="bbbbbbb"/><Post id="aaaaaaaa"/></otherPosts></Post>

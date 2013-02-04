@@ -4,14 +4,19 @@ require_once("core/utils/ClassAutoLoader.php");
 $autoLoader=new ClassAutoLoader();
 $autoLoader->addPath("core",true);
 TraceConf::$doTrace=true;
-
+Nestor::start();
 echo "<h1>Read tree</h1>";
 
 //open the database
+
+
 $db=new GinetteDb("myDatabase1");
+
+traceError(Nestor::time());
 
 traceComment("Get the 'main' tree");
 $tree=$db->getTreeById("main");
+traceError(Nestor::time());
 traceLabeled("tree created",$tree->getCreated()->format("Y/m/d h:i:s"));
 traceLabeled("tree updated",$tree->getUpdated()->format("Y/m/d h:i:s"));
 traceComment("Now a tree....");
@@ -29,7 +34,9 @@ function traceTree($branches){
     echo "</ul>";
 }
 
+traceError(Nestor::time());
 traceTree($tree->branches);
+traceError(Nestor::time());
 /*
 traceLabeled("get the parent of :",$tree->branches[0]->branches[0]->model->getId());
 traceLabeled("get the parent of :",$tree->branches[0]->branches[0]->parent->model->getId());
@@ -43,47 +50,50 @@ trace("write....");
 function getModelName($db){
     $i=1;
     $name="test-".$i;
-    while($db->getModelById($name)){
+    while($db->modelExists($name)){
         $i++;
         $name="test-".$i;
     }
     return $name;
 }
 
-$model=new Post(getModelName($db),$db);
+$model=$db->createRecord(getModelName($db),"Post");
 traceLabeled("new model",$model);
 $tree->branches->push($model);
-traceLabeled("first node xml after prepend",$tree->xml->firstChild->firstChild->nodeName."/".$tree->xml->firstChild->firstChild->getAttribute("id"));
+//traceLabeled("first node xml after prepend",$tree->xml->firstChild->firstChild->nodeName."/".$tree->xml->firstChild->firstChild->getAttribute("id"));
 traceLabeled("first node model after prepend",
     $tree->branches[0]->model->getType()." /
     ".$tree->branches[0]->model->getId());
 
 
-$model=new Post(getModelName($db),$db);
+$model=$db->createRecord(getModelName($db),"Post");
 traceLabeled("new model to put into first",$model);
+/*
 $tree->branches[0]->branches->push($model);
 $tree->branches[0]->branches[0]->branches->push($model);
 $tree->branches[0]->branches[0]->branches[0]->branches->push($model);
-
-for($i=0;$i<10;$i++){
-    $model=new Post(getModelName($db),$db);
+*/
+traceError("will create 100...".Nestor::time());
+for($i=0;$i<100;$i++){
+    $model=$db->createRecord(getModelName($db),"Post");
     $tree->branches[rand(0,$tree->branches->length()-1)]->branches->push($model);
 }
+traceError("Done! 100...".Nestor::time());
 
 
 
 
-/*
-$tree->branches->shift();
+
+//$tree->branches->shift();
 //$tree->branches->offsetUnset(0);
-traceLabeled("first node xml after shift",$tree->xml->firstChild->firstChild->nodeName."/".$tree->xml->firstChild->firstChild->getAttribute("id"));
+//traceLabeled("first node xml after shift",$tree->xml->firstChild->firstChild->nodeName."/".$tree->xml->firstChild->firstChild->getAttribute("id"));
 traceLabeled("first node model after shift",$tree->branches[0]->model->getType()." / ".$tree->branches[0]->model->getId());
 trace("------------------------");
-*/
+
 traceTree($tree->branches);
-
+traceError("save...".Nestor::time());
 $tree->save();
-
+traceError("save end...".Nestor::time());
 $xpath = new DOMXPath($tree->xml);
 // We starts from the root element
 $query = "//Post[@id='beatles']";

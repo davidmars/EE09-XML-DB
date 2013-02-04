@@ -5,48 +5,7 @@
  */
 class GinetteTree extends GinetteXml implements GinetteXml_interface
 {
-    /**
-     * @param string $id
-     * @param GinetteDb $db
-     * @throws Exception
-     */
-    public function __construct($id,GinetteDb $db){
 
-        $this->db=$db;
-        $rc = new ReflectionClass($this);
-        $this->type = $rc->getName();
-
-        if($id!="FROM_DB_HACK"){
-            traceCode("------construct a new " . $this->type."-----------");
-            //it is a real new model
-            if($this->db->treeExists($id)){
-                throw new Exception("Ginette say to you :
-                Espèce d'abruti! You tried to create a new ".$this->type." with the id '$id' but this id is already used by an other tree.
-                Try an other id for this tree or delete the '$id' one. Adieux!");
-            }
-
-            //okay...it is a real new tree
-
-            //set the id
-            $this->id=$id;
-
-            //set the xml from the structure
-            $this->xml=XmlUtils::load($db->paths->xmlTemplates."/GinetteTree.xml");
-
-            /** @var $root DOMElement */
-            $root=$this->xml->firstChild;
-            $root->setAttribute("id",$this->id);
-            $root->setAttribute("created",time());
-            $root->setAttribute("updated",time());
-
-            $this->parse();
-            $this->save();
-
-        }else{
-            traceCode("------construct a new " . $this->type." from an xml-----------");
-            //$this->parse();
-        }
-    }
 
     /**
      * Return a new branch that you will be able to add somewhere in the tree.

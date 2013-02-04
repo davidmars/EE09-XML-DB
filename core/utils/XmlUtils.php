@@ -64,6 +64,7 @@ class XmlUtils
             $rootNode=$x->createElement($rootNodeName);
             $x->appendChild($rootNode);
             $x->preserveWhiteSpace=false;
+            FileTools::mkDirOfFile($url);
             $x->save($url);
             return $x;
         }
