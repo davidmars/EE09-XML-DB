@@ -1,12 +1,14 @@
 <?php
 /**
- * Reference all Ginette database paths.
+ * Reference all Ginette database directories.
  */
 class GinetteDbPaths
 {
     /**
      * Will automatically set all paths necessary to the database.
      * @param string $rootPath database root path
+     * @param string $phpRoot The root directory of the Ginette framework.
+     * Useful for stuff not directly in relation with THIS database but with all Ginette Database.
      */
     public function __construct($rootPath,$phpRoot){
 

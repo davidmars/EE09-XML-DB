@@ -65,7 +65,9 @@ class GinetteDb
     }
 
     /**
-     * Test if a record with the given id exists
+     * Test if a record with the given id exists.
+     * To perform this operation it looks if the xml file exists.
+     *
      * @param $id
      * @return bool true if it exists elsewhere false.
      */
@@ -182,23 +184,33 @@ class GinetteDb
     private $treeReferences = array();
 
     /**
-     * @param string $modelId The model to find
+     *
+     * Search a model by id.
+     *
+     * @param string $id The record to find
      * @return GinetteRecord The related model. If not found, will return null.
      */
-    public function getModelById($recordId)
+    public function getModelById($id)
     {
-        //yet loaded?
-        if (isset($this->modelReferences[$recordId])) {
-            return $this->modelReferences[$recordId];
+        //existing model?
+        if (isset($this->modelReferences[$id])) {
+            return $this->modelReferences[$id];
         }
 
-        $record=$this->index->getRecord($recordId);
+        //search in the index...maybe not a good idea
+        $record=$this->index->getRecord($id);
         if($record){
             return $record;
         }
-        if($record){
-           $xml=$this->loadRecordXml($recordId);
+
+        //not found in the index, but if file exists.
+        if($this->modelExists($id)){
+           $xml=$this->loadRecordXml($id);
            $record=$this->fromXml($xml);
+            if($record){
+                //correct the index
+                $this->index->add($record);
+            }
            return $record;
         }
         return false;
@@ -222,21 +234,25 @@ class GinetteDb
 
 
     /**
-     * loads and return
+     * Loads the xml related to a record and return the related XML document.
      *
-     * @param $id
-     * @return bool|DOMDocument
+     * @param string $id The record id
+     * @return DOMDocument If the file doesn't exists return an exception.
      * @throws Exception
      */
     public function loadRecordXml($id){
         $file = $this->getModelXmlUrl($id);
         if($this->modelExists($id)){
-            traceCode("load xml $id");
+            traceCode("Load xml $id");
             $xml = XmlUtils::load($file);
             return $xml;
         }else{
-            throw new Exception("model node not found (id=$id)");
-            return false;
+            throw new Exception("
+            Ginette says :
+            T'as perdu quelque chose mon ptit gars?
+            There is no file '$file' "
+            );
+
         }
 
     }
@@ -259,6 +275,7 @@ class GinetteDb
                 $root->setAttribute("id",$id);
                 $root->setAttribute("created",time());
                 $root->setAttribute("updated",time());
+                /** @noinspection PhpParamsInspection */
                 XmlUtils::save($xml,$this->paths->records."/$id.xml");
                 $record=$this->recordInstance($id,$type);
                 $this->index->add($record);
@@ -324,6 +341,7 @@ class GinetteDb
     private function fromXml($xml)
     {
         $type = $xml->firstChild->nodeName;
+        /** @noinspection PhpUndefinedMethodInspection */
         $id = $xml->firstChild->getAttribute("id");
         if (class_exists($type)) {
             /** @var $model GinetteRecord */

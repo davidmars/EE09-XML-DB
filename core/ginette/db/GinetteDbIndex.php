@@ -5,8 +5,7 @@
 class GinetteDbIndex
 {
     /**
-     * @param GinetteDb $db
-     * @param string $indexesPath where are xml indexes files?
+     * @param GinetteDb $db Well, the database.
      */
     public function __construct($db){
         $this->db=$db;
@@ -18,6 +17,7 @@ class GinetteDbIndex
      * Reset the all records index
      */
     public function indexAllRecords(){
+        /** @noinspection PhpParamsInspection */
         XmlUtils::emptyNode($this->allRecords->firstChild);
         foreach ($this->modelsFromFileSystem() as $m){
             $n=$this->allRecords->createElement($m->getType());
@@ -37,12 +37,10 @@ class GinetteDbIndex
             $file=$dir.$f;
             $id=$this->db->extractNameXml($f);
             if(is_file($file) && $id){
-                $r=$this->db->getModelById($id);
                 $xml=$this->db->loadRecordXml($id);
                 $type=$xml->firstChild->nodeName;
-                $arr[]=new $type($id,$this->db);
-
-
+                $record=$this->db->recordInstance($id,$type);
+                $arr[]=$record;
             }
         }
         return $arr;
