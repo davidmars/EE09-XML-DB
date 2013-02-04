@@ -1,10 +1,6 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: heeek
- * Date: 01/02/13
- * Time: 05:58
- * To change this template use File | Settings | File Templates.
+ * Here are methods to implements in all class related to an xml
  */
 interface GinetteXml_interface
 {

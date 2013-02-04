@@ -35,7 +35,7 @@ class GinetteBranchArray extends ArrayObject
         for($i=0;$i<$this->xml->childNodes->length;$i++){
             $n=$this->xml->childNodes->item($i);
             if($n->nodeType=="1"){
-                // @var DOMElement $n
+                /**  @var DOMElement $n */
                 $branch=toolsGinetteTree::fromNode($this->tree,$n);
                 if($branch){
                     $array[]=$branch;
@@ -135,6 +135,7 @@ class GinetteBranchArray extends ArrayObject
     /**
      * @param int $index
      * @param GinetteBranch $value
+     * @throws Exception
      * @return bool|void
      */
     public function offsetSet($index, $value) {
@@ -154,6 +155,8 @@ class GinetteBranchArray extends ArrayObject
 
     /**
      * @param int $index
+     * @throws Exception
+     * @return void
      */
     public function offsetUnset($index){
         if(!$this->indexIsGood($index)){

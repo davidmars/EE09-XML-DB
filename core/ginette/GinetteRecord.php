@@ -13,7 +13,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
      * @return FileImage The FileImage field
      */
     public function getThumbnail(){
-        $definition = $this->db->getModelDefinition($this->type);
+        $definition = $this->db->getModelDefinition($this->getType());
         if($definition->thumbnail){
             $fieldName=$definition->thumbnail->varName;
             return $this->$fieldName;
@@ -32,7 +32,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
     protected function parse()
     {
 
-        $definition = $this->db->getModelDefinition($this->type);
+        $definition = $this->db->getModelDefinition($this->getType());
 
         //fields
         foreach ($definition->fields as $field) {
@@ -100,7 +100,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
                                 $id=$n->getAttribute("id");
                                 if($id && $this->db->modelExists($id)){
                                     $val=$this->db->getModelById($id);
-                                    if($val->type==$field->arrayType){
+                                    if($val->getType()==$field->arrayType){
                                         $valArray[]=$val;
                                     }
                                 }
@@ -128,15 +128,17 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
         //update refresh
         $this->updated->setTimestamp(time());
 
-        $definition = $this->db->getModelDefinition($this->type);
+        $definition = $this->db->getModelDefinition($this->getType());
 
         //get a fresh new XML from the structure
 
         /** @var $saveXml DOMDocument */
         $saveXml = $definition->xml->cloneNode(true);
-        $saveXml->firstChild->setAttribute("id",$this->getId());
-        $saveXml->firstChild->setAttribute("created",$this->created->getTimestamp());
-        $saveXml->firstChild->setAttribute("updated",$this->updated->getTimestamp());
+        /** @var DOMElement $root  */
+        $root= $saveXml->firstChild;
+        $root->setAttribute("id",$this->getId());
+        $root->setAttribute("created",$this->created->getTimestamp());
+        $root->setAttribute("updated",$this->updated->getTimestamp());
 
         foreach ($definition->fields as $field) {
 
@@ -192,7 +194,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
             }
         }
 
-        $saveXml->save($this->db->getModelXmlUrl($this->id));
+        $saveXml->save($this->db->getModelXmlUrl($this->getId()));
         $this->xml = $saveXml;
     }
 
@@ -201,7 +203,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
      */
     public function delete(){
 
-        $this->db->deleteModel($this->id);
+        $this->db->deleteModel($this->getId());
 
         //remove all references to this one in others models
 
@@ -214,18 +216,6 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
 
         //remove xml file
 
-    }
-
-    /**
-     * @return DOMElement a reference node <ModelName id='model-id'></ModelName>
-     */
-    private  function getNodeAssoc()
-    {
-        $dom = new DOMDocument();
-        $n = $dom->createElement($this->type);
-        $n->setAttribute("id", $this->id);
-        //$n->setAttributeNode($attrId);
-        return $n;
     }
 
     public function __toString(){

@@ -52,8 +52,9 @@ class XmlUtils
     }
 
     /**
-     * If $url do not exists create it. In both case return the xml doc Return it.
+     * If $url does'nt not exists create it. In both case return the xml doc Return it.
      * @param $url
+     * @param string $rootNodeName The first child node name.
      * @return DOMDocument
      */
     public static function loadOrCreate($url,$rootNodeName="data"){

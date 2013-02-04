@@ -26,6 +26,7 @@ class GinetteTree extends GinetteXml implements GinetteXml_interface
     {
         parent::parse();
         //populate branches
+        /** @noinspection PhpParamsInspection */
         $this->branches=new GinetteBranchArray($this,$this->xml->firstChild);
     }
 
@@ -36,7 +37,7 @@ class GinetteTree extends GinetteXml implements GinetteXml_interface
      */
     public function save(){
         $this->xml->formatOutput=true;
-        $this->xml->save($this->db->getTreeXmlUrl($this->id));
+        $this->xml->save($this->db->getTreeXmlUrl($this->getId()));
     }
     /**
      * Delete the Tree.
@@ -52,7 +53,7 @@ class GinetteTree extends GinetteXml implements GinetteXml_interface
 
 
     public function __toString(){
-        return "GinetteTree id:".$this->id;
+        return "GinetteTree id:".$this->getType();
     }
 
 }

@@ -1,7 +1,8 @@
 <?php
 /**
  * @property DOMDocument $xml The xml storage related to this record
- *
+ * @property DateTime $created The creation date of this record.
+ * @property DateTime $updated^The last modification date of this record
  */
 class GinetteXml
 {
@@ -88,7 +89,7 @@ class GinetteXml
         $this->db=$db;
 
         //set the type
-        $type=$this->type=get_class($this);
+        $this->type=get_class($this);
         //set the id
         $this->id=$id;
 
@@ -100,6 +101,7 @@ class GinetteXml
     /**
      * The magic getter should be called once. When this call occurs, the xml is parsed.
      * @param $field
+     * @throws Exception
      * @return mixed
      */
     public function __get($field)
@@ -116,8 +118,11 @@ class GinetteXml
         }
         return $this->$field;
     }
+
     /**
      * @param $field
+     * @param $val
+     * @throws Exception
      * @return mixed
      */
     public function __set($field,$val)
@@ -137,9 +142,10 @@ class GinetteXml
 
     protected function parse(){
 
-        //traceError($this->xml->firstChild->nodeName);
-        $this->created=DateAndTime::fromString($this->xml->firstChild->getAttribute("created"));
-        $this->updated=DateAndTime::fromString($this->xml->firstChild->getAttribute("updated"));
+        /** @var DOMElement $root  */
+        $root=$this->xml->firstChild;
+        $this->created=DateAndTime::fromString($root->getAttribute("created"));
+        $this->updated=DateAndTime::fromString($root->getAttribute("updated"));
         $this->parsed=true;
     }
 
