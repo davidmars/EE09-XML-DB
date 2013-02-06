@@ -27,7 +27,8 @@ class GinetteDbIndex
         XmlUtils::save($this->allRecords,$this->allRecordsUrl);
     }
     /**
-     * Return list of models from the file system
+     * Return list of models from the file system.
+     * To do it list all xml in the database records path and loads all models so IT COST A LOT OF MEMORY!!!!
      * @return GinetteRecord[]
      */
     private function modelsFromFileSystem(){
@@ -39,7 +40,7 @@ class GinetteDbIndex
             if(is_file($file) && $id){
                 $xml=$this->db->loadRecordXml($id);
                 $type=$xml->firstChild->nodeName;
-                $record=$this->db->recordInstance($id,$type);
+                $record=$this->db->getRecordInstance($id,$type);
                 $arr[]=$record;
             }
         }
@@ -58,7 +59,7 @@ class GinetteDbIndex
     }
 
     /**
-     * searching in the index return a GinetteRecord
+     * Searching in the index return a GinetteRecord
      * @param string $id
      * @return GinetteRecord
      */
@@ -68,16 +69,13 @@ class GinetteDbIndex
         if($results->length==1){
             $node=$results->item(0);
             $type=$node->nodeName;
-            return $this->db->recordInstance($id,$type);
+            return $this->db->getRecordInstance($id,$type);
         }else{
             return false;
         }
 
     }
 
-    public function getList(){
-
-    }
 
     /**
      * @var GinetteDb
@@ -90,7 +88,7 @@ class GinetteDbIndex
     /**
      * @var string
      */
-    public $allRecordsUrl;
+    private $allRecordsUrl;
 
 
 }

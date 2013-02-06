@@ -19,11 +19,16 @@ class GinetteDbPaths
         $this->indexes=$this->data."/indexes";
         $this->records=$this->data."/records";
         $this->trees=$this->data."/trees";
+        $this->settings=$this->data."/settings.xml";
 
         //framework path
         $this->xmlTemplates=$phpRoot."/xmlTemplates";
     }
 
+    /**
+     * @var string The xml where are the settings
+     */
+    public $settings;
     /**
      * @var string XML templates directory. Here are stored xml that will be used to generate new xml such as Trees, indexes, fields nodes etc...
      */

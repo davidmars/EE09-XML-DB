@@ -9,20 +9,19 @@ class toolsGinetteTree
      * @param GinetteTree $tree The tree where is the branch
      * @param DOMElement $node The xml node that represents this branch
      * @throws Exception If no related model is found
-     * @return \GinetteBranch|null
+     * @return \GinetteBranch|bool
      */
     public static function fromNode(GinetteTree $tree,DOMElement $node){
         $idRecord=$node->getAttribute("id");
         $typeRecord=$node->nodeName;
         if($tree->db->modelExists($idRecord)){
-            $model=$tree->db->recordInstance($idRecord,$typeRecord);
+            $model=$tree->db->getRecordInstance($idRecord,$typeRecord);
             //okay...
             $branch=new GinetteBranch($tree);
             $branch->model=$model;
             $branch->xml=$node;
             return $branch;
         }else{
-
             return false;
         }
         /*

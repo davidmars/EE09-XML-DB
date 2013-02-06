@@ -17,12 +17,27 @@ class C_editModel extends C_admin
     {
         parent::__construct();
 
+        //the model
         $id = "new";
         if (isset($_GET["id"])) {
             $id = $_GET["id"];
         }
         $this->model = $this->db->getModelById($id);
 
+        //the opened branch
+        if(isset($_GET["tree"])){
+            $tree=$this->db->getTreeById($_GET["tree"]);
+            if($tree && $_GET["branch"]){
+                $branch=$tree->getBranchById($_GET["branch"]);
+                if($branch){
+                    VM_tree::$openedBranch=$branch;
+                }
+            }
+
+        }
+
+
+        //the action
         $action = "edit";
         if (isset($_GET["action"])) {
             $action = $_GET["action"];
@@ -38,11 +53,15 @@ class C_editModel extends C_admin
                 break;
         }
 
+
+
+
     }
 
     private function edit()
     {
-        $v = new View("editModel", new VM_editModel($this->model));
+        $vv=new VM_editModel($this->model);
+        $v = new View("editModel", $vv);
         echo $v->render();
     }
 
@@ -75,10 +94,19 @@ class C_editModel extends C_admin
         echo $v->render();
     }
 
-
-    public static function urlEdit($id)
+    /**
+     * @param string $id The record to edit
+     * @param GinetteBranch $branch
+     * @return string
+     */
+    public static function urlEdit($id,$branch=null)
     {
-        return "?p=editModel&id=$id";
+        $url="?p=editModel&id=$id";
+        if($branch){
+            $url.="&tree=".$branch->tree->getId();
+            $url.="&branch=".$branch->localId();
+        }
+        return $url;
     }
 
     public static function urlSave($id)

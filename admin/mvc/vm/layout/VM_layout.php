@@ -16,4 +16,13 @@ class VM_layout extends VM_admin
         $arr=self::$db->getModelList();
         return new VM_record_list($arr);
     }
+
+    /**
+     * @param string $treeId
+     * @return VM_tree
+     */
+    public function getTree($treeId="main"){
+        $tree=self::$db->getTreeById($treeId);
+        return new VM_tree($tree);
+    }
 }

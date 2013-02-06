@@ -17,6 +17,7 @@ $vv = $_vars;
         <meta name="viewport" content="width=device-width">
 
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/css-tree/css-tree.css">
         <style>
             body {
                 padding-top: 60px;
@@ -48,6 +49,8 @@ $vv = $_vars;
 
         <script src="js/vendor/bootstrap.min.js"></script>
 
+        <script src="js/jaquy/EventDispatcher.js"></script>
+        <script src="js/jaquy/SimpleAjax.js"></script>
         <script src="js/main.js"></script>
     </body>
 </html>

@@ -17,6 +17,14 @@ class VM_admin extends ViewVariables
      * @return VM_layout
      */
     public function getLayout(){
-        return new VM_layout();
+        if(!self::$layout){
+            self::$layout=new VM_layout();
+        }
+        return self::$layout;
     }
+
+    /**
+     * @var VM_layout
+     */
+    private static $layout;
 }

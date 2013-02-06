@@ -15,6 +15,52 @@ class GinetteBranch{
     }
 
     /**
+     * @return string An identifier of the branch in the tree.
+     * This identifier in fact is the xpath identifier of the node.
+     */
+    public function localId(){
+        $id=$this->xml->getAttribute("branchId");
+        if(!$id){
+            $id=$this->tree->db->settings->getUid();
+            $this->xml->setAttribute("branchId",$id);
+            $this->tree->save();
+        }
+        return $id;
+    }
+
+    /**
+     * Returns true if this branch is a child of the specified branch
+     * @param GinetteBranch $branch
+     * @return bool True if this branch is a child of the specified branch
+     */
+    public function isChildOf($branch){
+        if(preg_match("#^".preg_quote($branch->xml->getNodePath())."#",$this->xml->getNodePath())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * return number of children recursively.
+     */
+    public function countAllChildren(){
+        return $this->xml->getElementsByTagName("*")->length;
+    }
+
+    /**
+     * return all children branches recursively
+     * @return GinetteBranch[]
+     */
+    public function allChildren(){
+        $ret=array();
+        foreach( $this->xml->getElementsByTagName("*") as $node){
+            $ret[]=toolsGinetteTree::fromNode($this->tree,$node);
+        }
+        return $ret;
+    }
+
+    /**
      * The getter manage lazy loading to prevent recursive generation of trees.
      * @param $var
      * @throws Exception If you try to set an undefined property

@@ -52,11 +52,20 @@ $this->inside("layout/html5bp",$vv);
 
         <div class="container">
             <div class="row">
+
+
+                <?php //---------------------------the left nav ?>
                 <div class="span4">
+                    <?php
+                    /*
                     <ul class="nav nav-list">
-                        <?=$this->render("layout/nav/left/models-list",$vv->getLayout()->getModelList())?>
+                        <?php //echo $this->render("layout/nav/left/models-list",$vv->getModelList())?>
+
                     </ul>
+                    */?>
+                    <?php echo $this->render("layout/nav/left/tree",$vv->getTree())?>
                 </div>
+                <?php //---------------------------the page content ?>
                 <div class="span8">
                     <?=$this->insideContent?>
                 </div>

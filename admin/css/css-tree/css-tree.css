@@ -1,0 +1,139 @@
+
+.css-treeview li.active > label > a {
+    color: #fff;
+}
+.css-treeview li.active > label{
+    position: relative;
+    z-index: 10;
+}
+.css-treeview li.active:before {
+    content:"";
+    position: absolute;
+    width: 100%;
+    height: 18px;
+    left:0px;
+    background-color: #0081c2;
+    z-index: -1;
+}
+
+
+.css-treeview ul,
+.css-treeview li
+{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.css-treeview input
+{
+    position: absolute;
+    opacity: 0;
+}
+
+.css-treeview
+{
+    font: normal 11px "Segoe UI", Arial, Sans-serif;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    position: relative;
+}
+
+.css-treeview a
+{
+    /*color: #00f;*/
+    text-decoration: none;
+}
+
+.css-treeview a:hover
+{
+    text-decoration: underline;
+}
+
+.css-treeview input + label + ul
+{
+    margin: 0 0 0 16px;
+}
+
+.css-treeview input ~ ul
+{
+    display: none;
+}
+
+.css-treeview label,
+.css-treeview label::before
+{
+    cursor: pointer;
+}
+
+.css-treeview input:disabled + label
+{
+    cursor: default;
+    opacity: .6;
+}
+
+.css-treeview input:checked:not(:disabled) ~ ul
+{
+    display: block;
+}
+
+.css-treeview label,
+.css-treeview label::before
+{
+    background: url("icons.png") no-repeat;
+}
+
+.css-treeview label,
+.css-treeview a,
+.css-treeview label::before
+{
+    display: inline-block;
+    height: 16px;
+    line-height: 16px;,
+vertical-align: middle;
+}
+
+.css-treeview label
+{
+    background-position: 18px 0;
+    margin-left: -8px;
+}
+.css-treeview li{
+    border-left:1px solid #888;
+}
+
+.css-treeview label::before
+{
+    content: "";
+    width: 16px;
+    margin: 0 22px 0 0;
+    vertical-align: middle;
+    background-position: 0 -32px;
+}
+
+.css-treeview input:checked + label::before
+{
+    background-position: 0 -16px;
+}
+
+/* webkit adjacent element selector bugfix */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+    .css-treeview
+    {
+        -webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
+    }
+
+@-webkit-keyframes webkit-adjacent-element-selector-bugfix
+{
+    from
+    {
+        padding: 0;
+    }
+    to
+    {
+        padding: 0;
+    }
+}
+    }

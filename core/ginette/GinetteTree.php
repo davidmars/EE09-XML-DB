@@ -2,6 +2,8 @@
 /**
  * A tree is tree dimensional list of records.
  * Records are not directly stocked in it, you need to get it via a branch.
+ *
+ * @property GinetteBranchArray|GinetteBranch[] $branches
  */
 class GinetteTree extends GinetteXml implements GinetteXml_interface
 {
@@ -24,12 +26,27 @@ class GinetteTree extends GinetteXml implements GinetteXml_interface
      */
     protected function parse()
     {
-        parent::parse();
+
         //populate branches
         /** @noinspection PhpParamsInspection */
         $this->branches=new GinetteBranchArray($this,$this->xml->firstChild);
+        //because of magic setter parent parse at the end !
+        parent::parse();
     }
 
+    /**
+     * @param string $branchId Id of the branch
+     * @return bool|GinetteBranch|null
+     */
+    public function getBranchById($branchId){
+        $xp=new DOMXPath($this->xml);
+        $nodes=$xp->query("//*[@branchId='".$branchId."']");
+        if($nodes->length == 1){
+            $branch=toolsGinetteTree::fromNode($this,$nodes->item(0));
+            return $branch;
+        }
+        return false;
+    }
 
 
     /**
@@ -46,10 +63,7 @@ class GinetteTree extends GinetteXml implements GinetteXml_interface
         die("tree delete not implemented yet.");
     }
 
-    /**
-     * @var GinetteBranchArray|GinetteBranch[]
-     */
-    public $branches;
+
 
 
     public function __toString(){

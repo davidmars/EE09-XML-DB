@@ -6,7 +6,8 @@
 class GinetteDb
 {
     /**
-     * @var GinetteDb[] Here a instances of the databases. If only one is set then database argument will be optional.
+     * @var GinetteDb[] Here are instances of the databases.
+     * If ONLY ONE, no more no less, is set then, the database argument will be optional when you will access records.
      */
     private static $instances=array();
 
@@ -24,6 +25,11 @@ class GinetteDb
             Database parameter is optional when you play with only ONE database !");
         }
     }
+
+    /**
+     * @var GinetteDbSettings Place where are stored globals variables like uids
+     */
+    public $settings;
     /**
      * @var M_fieldManager[]
      */
@@ -57,10 +63,14 @@ class GinetteDb
         $autoLoader->addPath($this->paths->definitions,true);
 
         $this->performTests();
+
+
+
         //boot the database
         $this->bootDefinitions();
 
         //
+        $this->settings=new GinetteDbSettings($this);
         $this->index=new GinetteDbIndex($this);
     }
 
@@ -218,11 +228,11 @@ class GinetteDb
 
     /**
      * If the record is already created returns it else create it, index cache it and return it.
-     * @param string $id
-     * @param string $type
-     * @return GinetteRecord
+     * @param string $id Id of the record.
+     * @param string $type Type of the record.
+     * @return GinetteRecord The record, it can be a new one or an existing one if it has been previously acceded.
      */
-    public function recordInstance($id,$type){
+    public function getRecordInstance($id,$type){
         if (isset($this->modelReferences[$id])) {
             return $this->modelReferences[$id];
         }else{
@@ -277,7 +287,7 @@ class GinetteDb
                 $root->setAttribute("updated",time());
                 /** @noinspection PhpParamsInspection */
                 XmlUtils::save($xml,$this->paths->records."/$id.xml");
-                $record=$this->recordInstance($id,$type);
+                $record=$this->getRecordInstance($id,$type);
                 $this->index->add($record);
                 return $record;
             }else{
@@ -327,7 +337,7 @@ class GinetteDb
             $n=$all->childNodes->item($i);
             $type=$n->nodeName;
             $id=$n->getAttribute("id");
-            $arr[]=$this->recordInstance($id,$type);
+            $arr[]=$this->getRecordInstance($id,$type);
         }
         return $arr;
     }
@@ -345,7 +355,7 @@ class GinetteDb
         $id = $xml->firstChild->getAttribute("id");
         if (class_exists($type)) {
             /** @var $model GinetteRecord */
-            $model = $this->recordInstance($id,$type);
+            $model = $this->getRecordInstance($id,$type);
             $model->xml=$xml;
             return $model;
         } else {

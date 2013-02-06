@@ -64,16 +64,18 @@ class GinetteBranchArray extends ArrayObject
      * @return bool
      */
     private function indexIsGood($index){
-        if(is_int($index)){
+        if(!$index){
+           $index=0;
+        }
+
+
             if($index<0){
                 return false;
             }else if($index>$this->xml->childNodes->length){
                 return false;
             }
             return true;
-        }else{
-            return false;
-        }
+
     }
 
 
@@ -132,6 +134,7 @@ class GinetteBranchArray extends ArrayObject
         return $branch;
     }
 
+
     /**
      * @param int $index
      * @param GinetteBranch $value
@@ -143,12 +146,13 @@ class GinetteBranchArray extends ArrayObject
             throw new Exception("Ginette says :
             Petit coquin va! Tu sais pas compter.
             Invalid index ($index). GinetteBranchArray only accepts integers in range.
+            The list length is ".$this->length()."
             ");
         }
         if($index>=$this->xml->childNodes->length-1){
             $this->xml->appendChild($value->xml);
         }else{
-            $this->xml->insertBefore($this->xml->childNodes->item($index+1));
+            $this->xml->insertBefore($value->xml,$this->xml->childNodes->item($index));
         }
         $this->remap();
     }
