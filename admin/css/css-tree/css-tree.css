@@ -99,6 +99,7 @@ vertical-align: middle;
     background-position: 18px 0;
     margin-left: -8px;
 }
+
 .css-treeview li{
     border-left:1px solid #888;
 }
@@ -109,12 +110,18 @@ vertical-align: middle;
     width: 16px;
     margin: 0 22px 0 0;
     vertical-align: middle;
+    /* icon closed */
     background-position: 0 -32px;
 }
 
+/* icon open */
 .css-treeview input:checked + label::before
 {
     background-position: 0 -16px;
+}
+/* empty so ... nor icon open or closed */
+.css-treeview li.empty input + label::before{
+    background: none;
 }
 
 /* webkit adjacent element selector bugfix */

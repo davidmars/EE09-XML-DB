@@ -14,14 +14,22 @@ class toolsGinetteTree
     public static function fromNode(GinetteTree $tree,DOMElement $node){
         $idRecord=$node->getAttribute("id");
         $typeRecord=$node->nodeName;
-        if($tree->db->modelExists($idRecord)){
-            $model=$tree->db->getRecordInstance($idRecord,$typeRecord);
-            //okay...
+
+        $isTrunk=($node->nodeName=="GinetteTree") ? true : false;
+
+        if($isTrunk || $tree->db->modelExists($idRecord)){
             $branch=new GinetteBranch($tree);
-            $branch->model=$model;
+            if(!$isTrunk){
+                $model=$tree->db->getRecordInstance($idRecord,$typeRecord);
+                $branch->model=$model;
+            }else{
+                $branch->isTrunk=true;
+            }
+            //okay...
             $branch->xml=$node;
             return $branch;
         }else{
+            die("invalid ".$idRecord);
             return false;
         }
         /*

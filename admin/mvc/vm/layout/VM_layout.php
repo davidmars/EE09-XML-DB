@@ -8,6 +8,7 @@
  */
 class VM_layout extends VM_admin
 {
+
     /**
      * Return the list to display in the browser menu.
      * @return VM_record_list
@@ -25,4 +26,6 @@ class VM_layout extends VM_admin
         $tree=self::$db->getTreeById($treeId);
         return new VM_tree($tree);
     }
+
+
 }

@@ -3,7 +3,7 @@
  * A tree is tree dimensional list of records.
  * Records are not directly stocked in it, you need to get it via a branch.
  *
- * @property GinetteBranchArray|GinetteBranch[] $branches
+ * @property GinetteBranch $trunk
  */
 class GinetteTree extends GinetteXml implements GinetteXml_interface
 {
@@ -21,6 +21,8 @@ class GinetteTree extends GinetteXml implements GinetteXml_interface
         $b->xml->setAttribute("id",$record->getId());
         return $b;
     }
+
+
     /**
      *  Parse the xml to fill the Tree properties
      */
@@ -28,8 +30,7 @@ class GinetteTree extends GinetteXml implements GinetteXml_interface
     {
 
         //populate branches
-        /** @noinspection PhpParamsInspection */
-        $this->branches=new GinetteBranchArray($this,$this->xml->firstChild);
+        $this->trunk=toolsGinetteTree::fromNode($this,$this->xml->firstChild);
         //because of magic setter parent parse at the end !
         parent::parse();
     }

@@ -15,6 +15,12 @@ class GinetteBranch{
     }
 
     /**
+     * @var bool True if this branch is the root branch of the tree
+     */
+    public $isTrunk=false;
+
+
+    /**
      * @return string An identifier of the branch in the tree.
      * This identifier in fact is the xpath identifier of the node.
      */

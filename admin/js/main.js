@@ -113,7 +113,12 @@ var Drag=function(jq){
         }
         console.log("put "+branch+" in "+container+" at position "+pos);
         GinetteApiTree.event.addEventListener("MOVE_BRANCH_SUCCESS",function(e){
-            branchContainer.jq.replaceWith($(e.data));
+            console.log("avant");
+            var newEl=$("<li>test</li>");
+            newEl.html(e.data);
+            newEl=newEl.find("li")[0];
+            branchContainer.jq.replaceWith(newEl);
+            console.log("apres");
         })
         branchContainer.jq.css("opacity",0.1);
         GinetteApiTree.moveBranch("main",branch,container,pos);
@@ -157,7 +162,7 @@ GinetteApiTree.moveBranch=function(tree,branchId,branchTarget,position){
     var loader=new SimpleAjax("index.php",vars);
     loader.type="GET";
     loader.events.addEventListener(EVENT_AJAX_SUCCESS,function(e){
-        console.log(e);
+        //console.log(e);
         GinetteApiTree.event.dispatchEvent("MOVE_BRANCH_SUCCESS",e);
     })
     loader.send();

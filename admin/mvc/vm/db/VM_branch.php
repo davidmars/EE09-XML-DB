@@ -76,4 +76,15 @@ class VM_branch
             return " ";
         }
     }
+
+    /**
+     * @return string "empty" or " " according if the branch has children or not
+     */
+    public function cssEmpty(){
+        if($this->branch->branches->length()==0){
+            return " empty ";
+        }else{
+            return "";
+        }
+    }
 }

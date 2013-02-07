@@ -17,18 +17,15 @@ class VM_tree extends ViewVariables
      */
     public function __construct($tree){
         $this->tree = $tree;
+        $this->trunk=new VM_branch($this->tree->trunk);
     }
 
     /**
-     * @return VM_branch[]
+     * @var VM_branch The main branch of the tree
      */
-    public function branches(){
-        $ret=array();
-        foreach($this->tree->branches as $br){
-            $ret[]=new VM_branch($br);
-        }
-        return $ret;
-    }
+    public $trunk;
+
+
 
     /**
      * @var GinetteBranch The currently branch that is open

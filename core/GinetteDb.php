@@ -75,6 +75,13 @@ class GinetteDb
     }
 
     /**
+     * Name of the database. In fact it is the directory name
+     */
+    public function name(){
+        return Francis::get($this->paths->root)->fileName();
+    }
+
+    /**
      * Test if a record with the given id exists.
      * To perform this operation it looks if the xml file exists.
      *

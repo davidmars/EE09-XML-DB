@@ -49,7 +49,7 @@ class C_tree extends C_admin
             die("pas de branch");
         }
         if($_GET["targetBranchId"]=="treeRoot"){
-            $to=$this->tree;
+            $to=$this->tree->trunk;
         }else{
             $to=$this->tree->getBranchById($_GET["targetBranchId"]);
         }
