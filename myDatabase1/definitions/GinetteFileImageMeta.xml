@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GinetteFileImageMeta id="" created="" updated=""
+                      description="Meta information for an image">
+
+	<width     type="String" description="Width of the image" ><![CDATA[]]></width>
+	<height     type="String" description="Height of the image" ><![CDATA[]]></height>
+	<title     type="String" description="Title of the image, will be useful for alt" ><![CDATA[]]></title>
+	<legend    type="String" description="Here is the post quick description" ><![CDATA[]]></legend>
+
+    <file   type="FileImage" description="Well, the image file itself" mime="" fileSize="0" url="" width="" height=""/>
+
+</GinetteFileImageMeta>

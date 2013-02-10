@@ -3,11 +3,11 @@
 /* @var $vv VM_tree */
 $vv = $_vars;
 ?>
-<div class="css-treeview">
+<div class="js-jaquy-tree" >
     <?php if(VM_tree::$openedBranch):?>
         <h4><?=VM_tree::$openedBranch->localId()?></h4>
     <?php endif?>
-    <ul>
+    <ul class="b">
         <?=$this->render("model-preview/branch",$vv->trunk)?>
         <?php /*
         <li class="js-branch">
@@ -23,4 +23,5 @@ $vv = $_vars;
         </li>
         */?>
     </ul>
+    <div class="bra"></div>
 </div>

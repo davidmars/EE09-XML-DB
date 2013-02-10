@@ -14,16 +14,37 @@ class GinetteDbPaths
 
         //database paths
         $this->root=$rootPath;
+
         $this->definitions=$rootPath."/definitions";
+        $this->files=$rootPath."/files";
         $this->data=$rootPath."/data";
+
         $this->indexes=$this->data."/indexes";
         $this->records=$this->data."/records";
         $this->trees=$this->data."/trees";
         $this->settings=$this->data."/settings.xml";
 
+        $this->cache=$rootPath."/cache";
+        $this->cacheImg=$this->cache."/img";
+
+
         //framework path
         $this->xmlTemplates=$phpRoot."/xmlTemplates";
+        $this->phpPath=$phpRoot;
     }
+    public $phpPath;
+    /**
+     * @var string The directory where are the cached files.
+     */
+    public  $cache;
+    /**
+     * @var string The directory where are the manipulated images results (resized, cropped etc...)
+     */
+    public $cacheImg;
+    /**
+     * @var string Root folder for files
+     */
+    public $files;
 
     /**
      * @var string The xml where are the settings

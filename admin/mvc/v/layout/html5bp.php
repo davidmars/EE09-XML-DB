@@ -46,11 +46,7 @@ $vv = $_vars;
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
+        <?=$this->render("layout/javascripts",$vv)?>
 
-        <script src="js/vendor/bootstrap.min.js"></script>
-
-        <script src="js/jaquy/EventDispatcher.js"></script>
-        <script src="js/jaquy/SimpleAjax.js"></script>
-        <script src="js/main.js"></script>
     </body>
 </html>

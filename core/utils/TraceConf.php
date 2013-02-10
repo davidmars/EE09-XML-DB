@@ -33,7 +33,8 @@ function traceCode($str){
 }
 function traceImg($url){
     echoTrace("<div style='background-color: #eee; color:#666; padding: 10px; margin: 10px;'>
-    <img src='".$url."' width='300px'>
+    <img src='".$url."' max-width='1000px'>
+    <div>$url</div>
     </div>");
 }
 

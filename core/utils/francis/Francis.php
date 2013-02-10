@@ -7,8 +7,10 @@
  */
 class Francis
 {
+    public $path;
 
     public function __construct($path){
+        $this->path=$path;
         $this->pathInfo=pathinfo($path);
     }
     public static function get($path){
@@ -34,10 +36,16 @@ class Francis
     }
 
     /**
-     * @return string Guess...
+     * Returns the extension or false if not possible (eg a directory)
+     * @return string|bool
      */
     public function extension(){
-        return $this->pathInfo['extension'];
+        if(isset($this->pathInfo['extension'])){
+            return $this->pathInfo['extension'];
+        }else{
+            return false;
+        }
+
     }
 
     /**
@@ -45,6 +53,19 @@ class Francis
      */
     public function fileName(){
         return $this->pathInfo['filename'];
+    }
+
+    public function isDir(){
+        return is_dir($this->path);
+    }
+    public function isFile(){
+        return is_file($this->path);
+    }
+    public function exists(){
+        return file_exists($this->path);
+    }
+    public function size(){
+        return filesize($this->path);
     }
 
 

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GinetteDirMeta id="" created="" updated=""
+                 description="Meta information for a file directory">
+
+	<title     type="String" description="Title of the directory" ><![CDATA[]]></title>
+	<description    type="String" description="Here you can put a quick description" ><![CDATA[]]></description>
+
+</GinetteDirMeta>

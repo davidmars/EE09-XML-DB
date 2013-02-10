@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteBase /ginette
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)/cache/img/(.*)$ processImages.php?db=$1&img=$2 [L,QSA]

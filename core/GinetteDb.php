@@ -54,8 +54,6 @@ class GinetteDb
         //code generation templates
         View::$rootPaths[]=__DIR__."/mvc/v";
 
-
-
         //set directories
         $this->paths=new GinetteDbPaths($rootPath,__DIR__);
 
@@ -64,14 +62,14 @@ class GinetteDb
 
         $this->performTests();
 
-
-
         //boot the database
         $this->bootDefinitions();
 
         //
         $this->settings=new GinetteDbSettings($this);
         $this->index=new GinetteDbIndex($this);
+
+        $this->fileRoot=new GinetteDir($this->paths->files,$this);
     }
 
     /**
@@ -81,6 +79,10 @@ class GinetteDb
         return Francis::get($this->paths->root)->fileName();
     }
 
+    /**
+     * @var GinetteDir
+     */
+    public $fileRoot;
     /**
      * Test if a record with the given id exists.
      * To perform this operation it looks if the xml file exists.
@@ -186,7 +188,7 @@ class GinetteDb
     {
         return $this->paths->records . "/$modelId.xml";
     }
-    public function getTreeXmlUrl($treeId)
+    private function getTreeXmlUrl($treeId)
     {
         return $this->paths->trees . "/$treeId.xml";
     }
@@ -194,11 +196,15 @@ class GinetteDb
     /**
      * @var GinetteRecord[] Here are the models which have been loaded. This array prevent multiple model references.
      */
-    private $modelReferences = array();
+    private $recordsReferences = array();
     /**
      * @var GinetteTree[] Here are the trees which have been loaded. This array prevent multiple tree references.
      */
     private $treeReferences = array();
+    /**
+     * @var GinetteFileSystemEntry[] Here are the files and folders which have been loaded. This array prevent multiple file or folder references.
+     */
+    private $filesReferences=array();
 
     /**
      *
@@ -210,8 +216,8 @@ class GinetteDb
     public function getModelById($id)
     {
         //existing model?
-        if (isset($this->modelReferences[$id])) {
-            return $this->modelReferences[$id];
+        if (isset($this->recordsReferences[$id])) {
+            return $this->recordsReferences[$id];
         }
 
         //search in the index...maybe not a good idea
@@ -237,15 +243,58 @@ class GinetteDb
      * If the record is already created returns it else create it, index cache it and return it.
      * @param string $id Id of the record.
      * @param string $type Type of the record.
-     * @return GinetteRecord The record, it can be a new one or an existing one if it has been previously acceded.
+     * @param bool $create If set to true and the model doesn't exists, will create it
+     * @return GinetteRecord|bool The record, it can be a new one or an existing one if it has been previously acceded.
      */
-    public function getRecordInstance($id,$type){
-        if (isset($this->modelReferences[$id])) {
-            return $this->modelReferences[$id];
+    public function getRecordInstance($id,$type,$create=false){
+        if (isset($this->recordsReferences[$id])) {
+            return $this->recordsReferences[$id];
         }else{
-            $record=new $type($id,$this);
-            $this->modelReferences[$id]=$record;
+            if($this->modelExists($id)){
+                $record=new $type($id,$this);
+                $this->recordsReferences[$id]=$record;
+            }else if($create){
+                $r=$this->createRecord($id,$type);
+                return $r;
+            }else{
+                return false;
+            }
+
+
             return $record;
+        }
+    }
+
+    /**
+     * @param $id
+     * @return bool|GinetteFileSystemEntry
+     */
+    public function getFileInstance($id){
+        if(isset($this->filesReferences[$id])){
+            return $this->filesReferences[$id];
+        }else{
+
+            $abs=$id;
+            if(file_exists($abs)){
+                if( is_dir($abs)){
+                    $this->filesReferences[$id]=new GinetteDir($abs,$this);
+                }else if(is_file($abs)){
+                    $file=new Francis($abs);
+                    switch(strtolower($file->extension())){
+                        case "jpg":
+                        case "gif":
+                        case "png":
+                        case "bmp":
+                            $this->filesReferences[$id]=new GinetteFileImage($abs,$this);
+                            break;
+                        default:
+                            $this->filesReferences[$id]=new GinetteFile($abs,$this);
+                    }
+                }
+                return $this->filesReferences[$id];
+            }else{
+                return false;
+            }
         }
     }
 
@@ -331,6 +380,8 @@ class GinetteDb
      */
     public $index;
 
+
+
     /**
      * Return list of models
      * @return GinetteRecord[]
@@ -369,6 +420,8 @@ class GinetteDb
             throw new Exception("Ginette t'engueule ptit con! FromXml error! there is no class $type");
         }
     }
+
+
 
     public function deleteModel($id)
     {
