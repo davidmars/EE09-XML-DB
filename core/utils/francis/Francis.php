@@ -1,9 +1,6 @@
 <?php
 /**
- * User: juliette david
- * Date: 07/02/13
- * Time: 07:17
- * To change this template use File | Settings | File Templates.
+ *
  */
 class Francis
 {
@@ -12,6 +9,7 @@ class Francis
     public function __construct($path){
         $this->path=$path;
         $this->pathInfo=pathinfo($path);
+
     }
     public static function get($path){
         return new Francis($path);

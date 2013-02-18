@@ -24,6 +24,7 @@ class VM_layout extends VM_admin
      */
     public function getTree($treeId="main"){
         $tree=self::$db->getTreeById($treeId);
+        //die($tree->created->format("h:i:s"));
         return new VM_tree($tree);
     }
 

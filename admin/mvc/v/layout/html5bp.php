@@ -16,15 +16,21 @@ $vv = $_vars;
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/css-tree/css-tree.css">
+        <?php //<link rel="stylesheet" href="css/bootstrap.min.css">?>
+        <?php
+        $lessUrl=Less::getCss("pub/ginetteAdmin",array("phpAppFolder"=>"'".C_admin::$baseUrl."'"));
+
+        ?>
+        <link rel="stylesheet" href="<?=$lessUrl?>">
+
         <style>
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+        <?php //<link rel="stylesheet" href="css/bootstrap-responsive.min.css"> ?>
+        <link rel="stylesheet" href="css/css-tree/css-tree.css">
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>

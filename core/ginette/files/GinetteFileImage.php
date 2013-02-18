@@ -46,7 +46,6 @@ class GinetteFileImage extends GinetteFile
         if($this->im){
            return $this->im;
         }
-
         $this->im = \PHPImageWorkshop\ImageWorkshop::initFromPath($this->path);
         return $this->im;
     }
@@ -130,6 +129,7 @@ class GinetteFileImage extends GinetteFile
     public function sizedShowAll($width,$height,$bgColor="#000000",$quality=95,$mime="jpg"){
         $filename=$this->getCacheUrl(__FUNCTION__,array($width,$height,$bgColor,$quality),$mime);
         $finalUrl=$this->cacheFolder()."/".$filename;
+
         if(self::$processImage && !file_exists($finalUrl)){
             // $positionX, $positionY & $position will have an impact on the layer position in the new box of 300px/300px (try another one !)
             $this->img()->resizeInPixel($width, $height, true, 0, 0, 'MM');

@@ -5,10 +5,10 @@
  *
  * @property String $name Name of the post
  * @property String $description Here is the post quick description
- * @property Image $thumbnail The image that represents this post
+ * @property FileImage $photo The image that represents this post
  * @property File $download An attached file to the post
  * @property Association $seeAlso Related posts to this post
- * @property Post $otherPost
+ * @property Post $otherPost 
  * @property Post[] $otherPosts A list of Posts, nothing else!
  *
  */

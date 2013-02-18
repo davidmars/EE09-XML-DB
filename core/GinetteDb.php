@@ -165,10 +165,10 @@ class GinetteDb
 
         $this->definitions[$modelName] = new M_fieldManager($xml);
 
-        //php gen
+        //php code generation
         $view=new View("class/modelXml",$this->definitions[$modelName]);
         $code=$view->render();
-        file_put_contents($this->paths->definitions."/generated/".$modelName."__gen.php",$code);
+        file_put_contents($this->paths->definitions."/".$modelName.".php",$code);
     }
 
     /**
@@ -266,10 +266,26 @@ class GinetteDb
     }
 
     /**
+     * @param string $id
+     * @return GinetteTree
+     */
+    public function getTreeInstance($id){
+        if(isset($this->treeReferences[$id])){
+            return $this->treeReferences[$id];
+        }else{
+            $inst=new GinetteTree($id,$this);
+            $this->treeReferences[$id]=$inst;
+            return $this->treeReferences[$id];
+        }
+    }
+    /**
      * @param $id
      * @return bool|GinetteFileSystemEntry
      */
     public function getFileInstance($id){
+        if(!preg_match("#".$this->paths->files."/"."#",$id)){
+            $id=$this->paths->files."/".$id;
+        }
         if(isset($this->filesReferences[$id])){
             return $this->filesReferences[$id];
         }else{
@@ -413,9 +429,19 @@ class GinetteDb
         $id = $xml->firstChild->getAttribute("id");
         if (class_exists($type)) {
             /** @var $model GinetteRecord */
-            $model = $this->getRecordInstance($id,$type);
-            $model->xml=$xml;
-            return $model;
+            if($type=="GinetteTree"){
+                $tree=$this->getTreeInstance($id);
+                $tree->xml=$xml;
+                return $tree;
+            }else{
+                $record = $this->getRecordInstance($id,$type);
+                if(!$record){
+                    throw new Exception("pas de record id=$id type=$type");
+                }
+                $record->xml=$xml;
+                return $record;
+            }
+
         } else {
             throw new Exception("Ginette t'engueule ptit con! FromXml error! there is no class $type");
         }

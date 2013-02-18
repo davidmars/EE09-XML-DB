@@ -8,7 +8,7 @@
 /* @var $this View */
 /* @var $vv VM_home */
 $vv = $_vars;
-$this->inside("layout/admin",$vv->getLayout());
+$this->inside("layout/layout-edit-record",$vv->getLayout());
 ?>
 
 <h1>Home</h1>

@@ -51,6 +51,13 @@ class C_editModel extends C_admin
             case "save";
                 return $this->save();
                 break;
+
+            case "home":
+            default:
+
+                $v=new View("home",new VM_home());
+                echo $v->render();
+                break;
         }
 
 
@@ -80,8 +87,9 @@ class C_editModel extends C_admin
                         break;
                     case "File":
                     case "FileImage":
-                        /** @var $obj File */
-                        $obj->setUrl($_POST[$var]);
+                        /** @var $obj GinetteFileImage */
+                        $obj=$this->db->getFileInstance($_POST[$var]);
+                        $this->model->$var=$obj;
                         break;
                     default:
                         $this->model->$var=$_POST[$var];
@@ -109,9 +117,20 @@ class C_editModel extends C_admin
         return $url;
     }
 
+    /**
+     * @param $id
+     * @return string The url to save a record
+     */
     public static function urlSave($id)
     {
         return "?p=editModel&action=save&id=$id";
+    }
+
+    /**
+     * @return string The url to display the records homepage
+     */
+    public static function urlHome(){
+        return "?p=editModel&action=home";
     }
 }
 

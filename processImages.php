@@ -22,6 +22,10 @@ if(preg_match('#^(.*)/sizedNoBorder-(.*)-(.*)-(.*)-(.*)\.(.*)#',$subject,$m)){
     if($img){
         $im=$img->sizedShowAll($m[2],$m[3],$m[4],$m[5],$m[6]);
         GinetteFileImage::output($im);
+    }else{
+        $f=$db->paths->files."/".$m[1];
+        echo $f." exists? ".file_exists($f);
+        die("problème!");
     }
 }else if(preg_match('#^(.*)/sizedHeight-(.*)-(.*)-(.*)\.(.*)#',$subject,$m)){
     $img=GinetteFileImage::getByUrl($m[1],$db);

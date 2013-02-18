@@ -1,5 +1,7 @@
 <?php
-
+/**
+ *
+ */
 class GinetteDir extends GinetteFileSystemEntry
 {
     /**
@@ -21,15 +23,14 @@ class GinetteDir extends GinetteFileSystemEntry
         $this->dirs=array();
 
         foreach(glob($this->path."/*") as $entry){
-        //foreach(scandir($this->path) as $entry){
-            if($entry != "." && $entry != ".."){
-
+            if($entry != "." && $entry != ".." && file_exists($entry)){
                 $instance=$this->db->getFileInstance($entry);
                 switch (get_class($instance)){
                     case "GinetteDir":
                         $this->dirs[]=$instance;
                         break;
                     case "GinetteFileImage":
+
                         $this->images[]=$instance;
                         $this->files[]=$instance;
                         break;

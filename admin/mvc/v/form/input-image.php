@@ -8,10 +8,16 @@
 /* @var $this View */
 /* @var $vv VM_form_element */
 $vv = $_vars;
-/** @var FileImage $value  */
+/** @var GinetteFileImage $value  */
 $value=$vv->value;
+$stringValue="";
+if(get_class($value)!="GinetteFileImage"){
+    $value=false;
+}else{
+   $stringValue=$value->relativePath;
+}
 ?>
-<div class="control-group">
+<div class="control-group" ginette-field-file>
     <label class="control-label" for="inputSuccess"><?=$vv->title?></label>
     <div class="controls">
         <div class="input-append">
@@ -19,13 +25,16 @@ $value=$vv->value;
                     type="text"
                     id="<?=$vv->varName?>"
                     name="<?=$vv->varName?>"
-                    value="<?=$vv->value?>"
+                    value="<?=$stringValue?>"
+                    placeholder="select an image"
                     >
-            <button class="btn" type="button"><i class="icon-circle-arrow-up"></i> </button>
+            <button file-manager-action="import-image" class="btn" type="button"><i class="icon-circle-arrow-up"></i> </button>
         </div>
-
-        <img class="help-block" src="<?=$value->getUrl()?>">
-
+        <?php if($value):?>
+            <img class="help-block thumbnail" src="<?php echo $value->sizedShowAll(300,300)?> ">
+        <?php else:?>
+            <img class="help-block thumbnail" width="300px" src="<?=C_admin::$baseUrl."/pub/img/default-empty-image.png"?>">
+        <?php endif?>
         <span class="help-block"><?=$vv->description?></span>
     </div>
 </div>

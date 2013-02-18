@@ -13,7 +13,7 @@ $vv = $_vars;
 <div class="media thumbnail">
     <a class="close pull-right" href="#">&times;</a>
     <a class="pull-left" href="#">
-        <img style="width:100px;" src="<?=$vv->getThumbnail()->getUrl()?>" alt="">
+        <?php /*<img style="width:100px;" src="<?=$vv->getThumbnail()->getUrl()?>" alt="">*/ ?>
     </a>
     <div class="media-body">
         <h4 class="media-heading"><?=$vv->getId()?></h4>

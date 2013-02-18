@@ -50,18 +50,14 @@ var SimpleAjax=function(url,data,cache){
             dataType : me.dataType,
             success:
                 function (response){
-                    me.events.dispatchEvent(EVENT_AJAX_SUCCESS,new EventAjaxSuccess(response));
+                    me.events.dispatchEvent(EVENT_AJAX_SUCCESS,response);
                 }
         });
     }
 }
 /**
- * The identifier for an successful ajax request.
+ * The event identifier for a successful ajax request.
  * @type {String}
  */
 var EVENT_AJAX_SUCCESS="event-ajax-success";
 
-var EventAjaxSuccess=function(data){
-    "use strict";
-    this.data=data;
-}

@@ -68,7 +68,8 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
                     $this->$fieldName=$val;
                     break;
                 case "FileImage":
-                    $val=new FileImage($node,$this);
+                    //$val=new FileImage($node,$this);
+                    $val=$this->db->getFileInstance($node->getAttribute("url"));
                     $this->$fieldName=$val;
                     break;
                 case "Association":
@@ -155,8 +156,13 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
                     $node->nodeValue = $obj->getTimestamp();
                     break;
 
-                case "File":
                 case "FileImage":
+                    /** @var $obj GinetteFileImage */
+                    $obj=$this->$fieldName;
+                    $node->setAttribute("url",$obj->relativePath);
+                    break;
+
+                case "File":
                 case "Association":
                     /** @var $obj NodeField */
                     $obj=$this->$fieldName;

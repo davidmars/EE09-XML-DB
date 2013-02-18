@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Well...this admin is not a good practice demonstration.
  * We need it simple, without dependencies and standalone.

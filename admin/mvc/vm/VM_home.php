@@ -8,9 +8,7 @@
  */
 class VM_home extends VM_admin
 {
-    /**
-     * @param GinetteRecord $model
-     */
+
     public function __construct(){
 
     }

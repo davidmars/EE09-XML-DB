@@ -3,7 +3,7 @@
 /* @var $vv VM_tree */
 $vv = $_vars;
 ?>
-<div class="js-jaquy-tree" >
+<div class="js-jaquy-tree css-treeview" >
     <?php if(VM_tree::$openedBranch):?>
         <h4><?=VM_tree::$openedBranch->localId()?></h4>
     <?php endif?>

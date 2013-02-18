@@ -1,18 +1,14 @@
 <?php
 /**
- * admin is a View template. It works with a mixed object.
- * layout for the admin pages
+ * main-nav is a View template. It works with a VM_layout object.
+ * The main navigation in the admin
  *
  */
 
 /* @var $this View */
 /* @var $vv VM_layout */
 $vv = $_vars;
-$this->inside("layout/html5bp",$vv);
-
 ?>
-<!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
-
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -21,9 +17,14 @@ $this->inside("layout/html5bp",$vv);
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
+
+
             <a class="brand" href="#">Ginette Admin</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
+
+
+                    <?php//------database selector----------?>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Database : <?=VM_admin::$db->name()?> <b class="caret"></b></a>
@@ -37,12 +38,16 @@ $this->inside("layout/html5bp",$vv);
                         </ul>
                     </li>
 
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <?php//------records----------?>
+                    <li class="active"><a href="<?=C_editModel::urlHome()?>">Records</a></li>
+
+                    <?php//------files----------?>
+                    <li><a href="<?=C_files::urlHome()?>">files</a></li>
+
 
                 </ul>
                 <form class="navbar-form pull-right">
+
                     <input class="span2" type="text" placeholder="Email">
                     <input class="span2" type="password" placeholder="Password">
                     <button type="submit" class="btn">Sign in</button>
@@ -51,33 +56,3 @@ $this->inside("layout/html5bp",$vv);
         </div>
     </div>
 </div>
-
-        <div class="container">
-            <div class="row">
-
-
-                <?php //---------------------------the left nav ?>
-                <div class="span4">
-                    <?php
-                    /*
-                    <ul class="nav nav-list">
-                        <?php //echo $this->render("layout/nav/left/models-list",$vv->getModelList())?>
-
-                    </ul>
-                    */?>
-                    <?php echo $this->render("layout/nav/left/tree",$vv->getTree())?>
-                </div>
-                <?php //---------------------------the page content ?>
-                <div class="span8">
-                    <?=$this->insideContent?>
-                </div>
-            </div>
-
-
-
-
-            <footer>
-                <p>&copy; Cocorico cowboy!</p>
-            </footer>
-
-        </div> <!-- /container -->

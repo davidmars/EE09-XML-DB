@@ -46,7 +46,7 @@ traceLabeled("Number of images",count($tree->childrenImages(true)));
 traceError(Nestor::time());
 
 //get a random image
-$randImage=$tree->childrenImages(true)[11];
+$randImage=$tree->childrenImages(true)[2];
 traceLabeled("random image is ",$randImage->fileName());
 
 traceError(Nestor::time());
@@ -67,8 +67,8 @@ traceImg($randImage->sizedWidth(100,"transparent",50,"png"));
 traceError(Nestor::time());
 
 
-traceLabeled("get the image","2011/mars/2011-01-03/IMG_1648.JPG");
-$im=GinetteFileImage::getByUrl("2011/mars/2011-01-03/IMG_1648.JPG",$db);
+traceLabeled("get the image","nous-3.jpg");
+$im=GinetteFileImage::getByUrl("nous-3.jpg",$db);
 traceError(Nestor::time());
 traceImg($im->sizedWidth(400));
 traceError(Nestor::time());

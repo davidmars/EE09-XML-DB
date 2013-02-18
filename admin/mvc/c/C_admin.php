@@ -12,6 +12,10 @@ class C_admin
      * @var GinetteDb $db
      */
     public $db;
+    /**
+     * @var string
+     */
+    public static  $baseUrl="/ginette/admin";
 
     public function __construct(){
         //open the database

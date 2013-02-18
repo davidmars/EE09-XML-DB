@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Post id="beatles" created="1359275112" updated="1359939297" description="A Post is an article."><name type="String" description="Name of the post"><![CDATA[The beatles]]></name><description type="String" editor="text-area" description="Here is the post quick description"><![CDATA[The beatles est un groupe de musique]]></description><thumbnail type="Image" description="The image that represents this post"><Image id="nous-3-image"/></thumbnail><download description="An attached file to the post" type="File" url="myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/" mime="" fileSize="0"/><seeAlso type="Association" possibleAssociation="Post"/><otherPost type="Post"><Post id="beatles"/></otherPost><otherPosts type="Post[]" description="A list of Posts, nothing else!"><Post id="queen"/><Post id="queen"/></otherPosts></Post>
+<Post id="beatles" created="1359275112" updated="1359939297" description="A Post is an article.">
+    <name type="String" description="Name of the post"><![CDATA[The beatles]]></name>
+    <description type="String" editor="text-area" description="Here is the post quick description">
+        <![CDATA[The beatles est un groupe de musique]]></description>
+    <thumbnail type="Image" description="The image that represents this post">
+        <Image id="nous-3-image"/>
+    </thumbnail>
+    <download description="An attached file to the post" type="File"
+              url="myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/myDatabase1/"
+              mime="" fileSize="0"/>
+    <seeAlso type="Association" possibleAssociation="Post"/>
+    <otherPost type="Post">
+        <Post id="beatles"/>
+    </otherPost>
+    <otherPosts type="Post[]" description="A list of Posts, nothing else!">
+        <Post id="queen"/>
+        <Post id="queen"/>
+    </otherPosts>
+</Post>

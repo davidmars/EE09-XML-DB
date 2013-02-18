@@ -5,7 +5,8 @@
 	<name           type="String"  description="Name of the post" ><![CDATA[]]></name>
 	<description    type="String" editor="text-area" description="Here is the post quick description" ><![CDATA[]]></description>
 
-    <thumbnail type="Image" description="The image that represents this post"></thumbnail>
+
+    <photo type="FileImage" description="The image that represents this post"></photo>
 
     <download   type="File" description="An attached file to the post" mime="" fileSize="0" url=""></download>
 
