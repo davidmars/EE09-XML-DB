@@ -10,13 +10,16 @@
 $vv = $_vars;
 ?>
 
-<div class="media thumbnail">
+<div class=" record-preview">
+    <div class="btns">
     <a class="close pull-right" href="#">&times;</a>
-    <a class="pull-left" href="#">
-        <?php /*<img style="width:100px;" src="<?=$vv->getThumbnail()->getUrl()?>" alt="">*/ ?>
+    </div>
+    <a class="thumb" href="#">
+        <img style="width:100px;" src="<?=$vv->getThumbnail()->sizedWidth(100,100)?>" alt="">
     </a>
-    <div class="media-body">
+    <div class="text">
         <h4 class="media-heading"><?=$vv->getId()?></h4>
         <p><?=$vv->getType()?></p>
     </div>
+
 </div>

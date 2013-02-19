@@ -26,6 +26,7 @@ class FileTools
             if( $type !== false ) {
                 return $type;
             }
+            throw new Exception("Problem while detecting mime");
         }
 
     }
@@ -77,6 +78,7 @@ class FileTools
      *
      * @param int $size Taille en octets
      * @param string $b Abbréviation de "byte"
+     * @return string
      */
     public static function humanSize( $bytes , $b = "B",$precision=0 ) {
         $units = array("$b", "K$b", "M$b", "G$b", "T$b");
@@ -124,6 +126,7 @@ class FileTools
     /**
      * Crée les répertoires et sous répertoire contenant $fileUrl
      * @param String $fileUrl url complete du fichier dont il faut éventuellement créer les répertoires conteneurs
+     * @return bool
      */
     static function mkDirOfFile($fileUrl){
         $splitted=explode("/",$fileUrl);

@@ -9,5 +9,4 @@
 /* @var $vv VM_files_manager */
 $vv = $_vars;
 $this->inside("layout/layout-files",$vv);
-?>
 

@@ -26,7 +26,7 @@ class VM_editModel extends VM_admin
     public function __construct($model){
         self::$current=$model;
         $this->model=$model;
-        $this->definition=VM_admin::$db->getModelDefinition($this->model->getType());
+        $this->definition=VM_admin::$db->getRecordDefinition($this->model->getType());
         $this->formElements=array();
         foreach($this->definition->fields as $field){
             $el=new VM_form_element($field,$this->model);

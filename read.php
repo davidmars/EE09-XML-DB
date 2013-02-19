@@ -17,7 +17,7 @@ traceError(Nestor::time()."after boot db");
 /**
 traceComment("Get the 'beatles' model by database object");
 
-$post=$db->getModelById("beatles");
+$post=$db->getRecordById("beatles");
 var_dump($post);
 traceLabeled("description:",$post->description);
 traceLabeled("created:",$post->created->format("Y m d h:i:s"));
@@ -54,17 +54,17 @@ $post=Post::getById("queen",$db);
 traceLabeled("description:",$post->description);
 
 $post->otherPost=Post::getById("queen",$db);
-if(!$db->modelExists("aaaaaaaa")){
+if(!$db->recordExists("aaaaaaaa")){
     $post->otherPosts[]=new Post("aaaaaaaa");
 }
-if(!$db->modelExists("bbbbbbb")){
+if(!$db->recordExists("bbbbbbb")){
     $post->otherPosts[]=new Post("bbbbbbb");
 }
 $post->save();
 */
 
 traceCode(Nestor::time()." start");
-$all=$db->getModelList();
+$all=$db->getRecordList();
 
 foreach($all as $m){
     //trace($m->getId());

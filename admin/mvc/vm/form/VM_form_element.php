@@ -86,6 +86,7 @@ class VM_form_element extends ViewVariables
             case "DateTime":
                 $this->value=$model->$varName;
                 $this->template="form/input-date";
+                break;
 
             default;
 

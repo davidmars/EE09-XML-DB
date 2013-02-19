@@ -722,7 +722,9 @@ class lessc {
 	 * The input is expected to be reduced. This function will not work on
 	 * things like expressions and variables.
 	 */
-	protected function compileValue($value) {
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    protected function compileValue($value) {
 		switch ($value[0]) {
 		case 'list':
 			// [1] - delimiter
@@ -977,7 +979,8 @@ class lessc {
 
 	// get the alpha of a color
 	// defaults to 1 for non-colors or colors without an alpha
-	protected function lib_alpha($value) {
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    protected function lib_alpha($value) {
 		if (!is_null($color = $this->coerceColor($value))) {
 			return isset($color[4]) ? $color[4] : 1;
 		}
@@ -1035,7 +1038,8 @@ class lessc {
 		return $color;
 	}
 
-	protected function assertNumber($value, $error = "expecting number") {
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    protected function assertNumber($value, $error = "expecting number") {
 		if ($value[0] == "number") return $value[1];
 		$this->throwError($error);
 	}
@@ -1279,7 +1283,8 @@ class lessc {
 
 
 	// coerce a value for use in color operation
-	protected function coerceColor($value) {
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    protected function coerceColor($value) {
 		switch($value[0]) {
 			case 'color': return $value;
 			case 'raw_color':
@@ -1376,7 +1381,8 @@ class lessc {
 		return array("string", "", array($left, $paddedOp, $right));
 	}
 
-	protected function stringConcatenate($left, $right) {
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    protected function stringConcatenate($left, $right) {
 		if ($strLeft = $this->coerceString($left)) {
 			if ($right[0] == "string") {
 				$right[1] = "";
@@ -1402,7 +1408,8 @@ class lessc {
 		return $c;
 	}
 
-	protected function op_number_color($op, $lft, $rgt) {
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    protected function op_number_color($op, $lft, $rgt) {
 		if ($op == '+' || $op == '*') {
 			return $this->op_color_number($op, $rgt, $lft);
 		}

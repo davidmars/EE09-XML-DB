@@ -90,8 +90,8 @@ class GinetteDb
      * @param $id
      * @return bool true if it exists elsewhere false.
      */
-    public function modelExists($id){
-        if(file_exists($this->getModelXmlUrl($id))){
+    public function recordExists($id){
+        if(file_exists($this->getRecordXmlUrl($id))){
            return true;
         }
         return false;
@@ -172,21 +172,23 @@ class GinetteDb
     }
 
     /**
-     * @param string $modelName The model name
-     * @return M_fieldManager Here are information about the given model.
+     * Return information about the structure of a kind of record.
+     * @param string $recordName The record name
+     * @return M_fieldManager Here are information about the given record family.
      */
-    public function getModelDefinition($modelName)
+    public function getRecordDefinition($recordName)
     {
-        return $this->definitions[$modelName];
+        return $this->definitions[$recordName];
     }
 
     /**
-     * @param $modelId
+     * Return The url of the data xml relative to a record
+     * @param $recordId
      * @return string
      */
-    public function getModelXmlUrl($modelId)
+    public function getRecordXmlUrl($recordId)
     {
-        return $this->paths->records . "/$modelId.xml";
+        return $this->paths->records . "/$recordId.xml";
     }
     private function getTreeXmlUrl($treeId)
     {
@@ -194,7 +196,7 @@ class GinetteDb
     }
 
     /**
-     * @var GinetteRecord[] Here are the models which have been loaded. This array prevent multiple model references.
+     * @var GinetteRecord[] Here are the records which have been loaded. This array prevent multiple record references.
      */
     private $recordsReferences = array();
     /**
@@ -208,14 +210,14 @@ class GinetteDb
 
     /**
      *
-     * Search a model by id.
+     * Search a record by id.
      *
      * @param string $id The record to find
-     * @return GinetteRecord The related model. If not found, will return null.
+     * @return GinetteRecord The related record. If not found, will return null.
      */
-    public function getModelById($id)
+    public function getRecordById($id)
     {
-        //existing model?
+        //existing record?
         if (isset($this->recordsReferences[$id])) {
             return $this->recordsReferences[$id];
         }
@@ -227,7 +229,7 @@ class GinetteDb
         }
 
         //not found in the index, but if file exists.
-        if($this->modelExists($id)){
+        if($this->recordExists($id)){
            $xml=$this->loadRecordXml($id);
            $record=$this->fromXml($xml);
             if($record){
@@ -243,14 +245,14 @@ class GinetteDb
      * If the record is already created returns it else create it, index cache it and return it.
      * @param string $id Id of the record.
      * @param string $type Type of the record.
-     * @param bool $create If set to true and the model doesn't exists, will create it
+     * @param bool $create If set to true and the record doesn't exists, will create it
      * @return GinetteRecord|bool The record, it can be a new one or an existing one if it has been previously acceded.
      */
     public function getRecordInstance($id,$type,$create=false){
         if (isset($this->recordsReferences[$id])) {
             return $this->recordsReferences[$id];
         }else{
-            if($this->modelExists($id)){
+            if($this->recordExists($id)){
                 $record=new $type($id,$this);
                 $this->recordsReferences[$id]=$record;
             }else if($create){
@@ -323,8 +325,8 @@ class GinetteDb
      * @throws Exception
      */
     public function loadRecordXml($id){
-        $file = $this->getModelXmlUrl($id);
-        if($this->modelExists($id)){
+        $file = $this->getRecordXmlUrl($id);
+        if($this->recordExists($id)){
             traceCode("Load xml $id");
             $xml = XmlUtils::load($file);
             return $xml;
@@ -348,9 +350,9 @@ class GinetteDb
      */
     public function createRecord($id,$type){
         if(class_exists($type)){
-            if(!$this->modelExists($id)){
+            if(!$this->recordExists($id)){
                 //set the xml from the structure
-                $definition=$this->getModelDefinition($type);
+                $definition=$this->getRecordDefinition($type);
                 $xml = $definition->xml->cloneNode(true);
                 /** @var $root DOMElement */
                 $root=$xml->firstChild;
@@ -397,18 +399,27 @@ class GinetteDb
     public $index;
 
 
-
     /**
-     * Return list of models
+     * Return list of records
+     * @param string $type Specifies a type of records to list. If null, all kind of records are listed
      * @return GinetteRecord[]
      */
-    public function getModelList(){
+    public function getRecordList($type=null){
         $arr=array();
 
-        $all=$this->index->allRecords->firstChild;
-        for($i=0;$i<$all->childNodes->length;$i++){
+        $rootNode=$this->index->allRecords->firstChild;
+
+        if($type){
+            $xpath = new DOMXpath($this->index->allRecords);
+            $list=$xpath->query("/Records/".$type."");
+        }else{
+            $list=$rootNode->childNodes;
+        }
+
+
+        for($i=0;$i<$list->length;$i++){
             /** @var DOMElement $n  */
-            $n=$all->childNodes->item($i);
+            $n=$list->item($i);
             $type=$n->nodeName;
             $id=$n->getAttribute("id");
             $arr[]=$this->getRecordInstance($id,$type);
@@ -417,10 +428,10 @@ class GinetteDb
     }
 
     /**
-     * Return a model from a DOMDocument xml object
+     * Return a record from a DOMDocument xml object
      * @param DOMDocument $xml
      * @throws Exception
-     * @return GinetteRecord The model object. In fact it will be a typed model according to xml type value, not a generic ModelXML object.
+     * @return GinetteRecord The record object. In fact it will be a typed record according to xml type value, not a generic ModelXML object.
      */
     private function fromXml($xml)
     {
@@ -428,7 +439,7 @@ class GinetteDb
         /** @noinspection PhpUndefinedMethodInspection */
         $id = $xml->firstChild->getAttribute("id");
         if (class_exists($type)) {
-            /** @var $model GinetteRecord */
+            /** @var $record GinetteRecord */
             if($type=="GinetteTree"){
                 $tree=$this->getTreeInstance($id);
                 $tree->xml=$xml;
@@ -449,7 +460,7 @@ class GinetteDb
 
 
 
-    public function deleteModel($id)
+    public function deleteRecord($id)
     {
         //TODO::write this class
     }

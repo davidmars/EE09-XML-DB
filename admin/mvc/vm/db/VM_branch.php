@@ -15,7 +15,7 @@ class VM_branch
      */
     public $isOpen=false;
     /**
-     * @var identifier of the branch
+     * @var string identifier of the branch
      */
     public $branchId;
     /**

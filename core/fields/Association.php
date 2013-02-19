@@ -21,7 +21,7 @@ class Association extends NodeField
             $n=$this->node->childNodes->item($i);
             $type = $n->nodeName;
             if (class_exists($type)) {
-                $m = $this->model->db->getModelById($n->getAttribute("id"));
+                $m = $this->model->db->getRecordById($n->getAttribute("id"));
                 $this->children[] = $m;
             }
         }

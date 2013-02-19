@@ -17,7 +17,7 @@ class toolsGinetteTree
 
         $isTrunk=($node->nodeName=="GinetteTree") ? true : false;
 
-        if($isTrunk || $tree->db->modelExists($idRecord)){
+        if($isTrunk || $tree->db->recordExists($idRecord)){
             $branch=new GinetteBranch($tree);
             if(!$isTrunk){
                 $model=$tree->db->getRecordInstance($idRecord,$typeRecord);
@@ -30,7 +30,7 @@ class toolsGinetteTree
             return $branch;
         }else{
             die("invalid ".$idRecord);
-            return false;
+            //return false;
         }
         /*
         if(!$model){

@@ -32,9 +32,10 @@ class C_tree extends C_admin
 
         switch ($action) {
             case "moveBranch";
-                return $this->moveBranch();
+                $this->moveBranch();
                 break;
-
+            default :
+                //nothing
         }
 
 
@@ -64,13 +65,6 @@ class C_tree extends C_admin
         $v = new View("model-preview/branch", $vv);
         echo $v->render();
 
-    /*
-        p=moveBranch
-        branchId
-        targetBranchId
-        position
-        tree
-     */
     }
 
 }

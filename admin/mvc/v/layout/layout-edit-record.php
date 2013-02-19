@@ -15,7 +15,7 @@ $this->inside("layout/layout-admin-page",$vv);
     <?php
     /*
     <ul class="nav nav-list">
-        <?php //echo $this->render("layout/nav/left/models-list",$vv->getModelList())?>
+        <?php //echo $this->render("layout/nav/left/models-list",$vv->getRecordList())?>
 
     </ul>
     */?>

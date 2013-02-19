@@ -32,14 +32,15 @@ class ImageWorkshop
      * @var integer
      */
     const ERROR_IMAGE_NOT_FOUND = 2;
-    
+
     /**
      * Initialize a layer from a given image path
-     * 
+     *
      * From an upload form, you can give the "tmp_name" path
-     * 
+     *
      * @param string $path
-     * 
+     *
+     * @throws Exception\ImageWorkshopException
      * @return ImageWorkshopLayer
      */
     public static function initFromPath($path)

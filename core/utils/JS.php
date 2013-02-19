@@ -97,7 +97,8 @@ class JS{
     public static function includeAfterBodyFiles($combine=false,$compress=false){
         
         return self::getOutput(self::$afterBodyFiles, $combine, $compress);
-        
+
+        /** @noinspection PhpUnreachableStatementInspection */
         $outp='';
         $names=array();
         $targetDir=Site::$mediaFolder."/cache/js/";
@@ -160,6 +161,7 @@ class JS{
         }
         
         //if compression
+        /** @noinspection PhpUnreachableStatementInspection */
         if($compress){
             
             

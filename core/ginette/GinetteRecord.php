@@ -7,21 +7,32 @@
 class GinetteRecord extends GinetteXml implements GinetteXml_interface
 {
     /**
-     * Return a FileImage field object that best represents the record.
+     * Return a GinetteFileImage field object that best represents the record.
      * If the record has a FileImage field and this one is not null, it will be returned.
      * If not, a default FileImage field will be returned
-     * @return FileImage The FileImage field
+     * @throws Exception
+     * @return GinetteFileImage The FileImage field
      */
     public function getThumbnail(){
-        $definition = $this->db->getModelDefinition($this->getType());
+        $definition = $this->db->getRecordDefinition($this->getType());
         if($definition->thumbnail){
             $fieldName=$definition->thumbnail->varName;
-            return $this->$fieldName;
-        }else{
-            $f= new FileImage(null,$this);
-            $f->setUrl("config/default-thumbnail.jpg");
-            return $f;
+            $image=$this->$fieldName;
+            if($image && get_class($image)=="GinetteFileImage"){
+                return $image;
+            }
+
         }
+
+        $file=$this->db->paths->files."/"."GinetteDefault/default-empty-image.png";
+        if(!file_exists($file) || !is_file($file)){
+            throw new Exception($file. "doesn't exists");
+        }
+        $f= $this->db
+            ->getFileInstance("GinetteDefault/default-empty-image.png");
+
+        return $f;
+
     }
 
 
@@ -32,7 +43,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
     protected function parse()
     {
 
-        $definition = $this->db->getModelDefinition($this->getType());
+        $definition = $this->db->getRecordDefinition($this->getType());
 
         //fields
         foreach ($definition->fields as $field) {
@@ -85,8 +96,8 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
                            $n=$node->childNodes->item($i);
                            if($n->nodeType==1){
                             $id=$n->getAttribute("id");
-                            if($id && $this->db->modelExists($id)){
-                                $val=$this->db->getModelById($id);
+                            if($id && $this->db->recordExists($id)){
+                                $val=$this->db->getRecordById($id);
                                 $this->$fieldName=$val;
                                 break;
                             }
@@ -99,8 +110,8 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
                             $n=$node->childNodes->item($i);
                             if($n->nodeType==1){
                                 $id=$n->getAttribute("id");
-                                if($id && $this->db->modelExists($id)){
-                                    $val=$this->db->getModelById($id);
+                                if($id && $this->db->recordExists($id)){
+                                    $val=$this->db->getRecordById($id);
                                     if($val->getType()==$field->arrayType){
                                         $valArray[]=$val;
                                     }
@@ -129,7 +140,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
         //update refresh
         $this->updated->setTimestamp(time());
 
-        $definition = $this->db->getModelDefinition($this->getType());
+        $definition = $this->db->getRecordDefinition($this->getType());
 
         //get a fresh new XML from the structure
 
@@ -200,7 +211,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
             }
         }
 
-        $saveXml->save($this->db->getModelXmlUrl($this->getId()));
+        $saveXml->save($this->db->getRecordXmlUrl($this->getId()));
         $this->xml = $saveXml;
     }
 
@@ -209,7 +220,7 @@ class GinetteRecord extends GinetteXml implements GinetteXml_interface
      */
     public function delete(){
 
-        $this->db->deleteModel($this->getId());
+        $this->db->deleteRecord($this->getId());
 
         //remove all references to this one in others models
 

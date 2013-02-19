@@ -35,7 +35,7 @@ class GinetteFileImage extends GinetteFile
         return $r;
     }
     /**
-     * @var ImageWorkshopLayer
+     * @var PHPImageWorkshop\Core\ImageWorkshopLayer
      */
     private $im;
     /**

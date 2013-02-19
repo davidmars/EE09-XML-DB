@@ -46,11 +46,12 @@ traceLabeled("get the parent of :",$tree->branches[0]->branches[0]->parent->mode
 trace("write....");
 /**
  * @param GinetteDb $db
+ * @return string
  */
 function getModelName($db){
     $i=1;
     $name="test-".$i;
-    while($db->modelExists($name)){
+    while($db->recordExists($name)){
         $i++;
         $name="test-".$i;
     }

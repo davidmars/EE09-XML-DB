@@ -22,7 +22,7 @@ class C_editModel extends C_admin
         if (isset($_GET["id"])) {
             $id = $_GET["id"];
         }
-        $this->model = $this->db->getModelById($id);
+        $this->model = $this->db->getRecordById($id);
 
         //the opened branch
         if(isset($_GET["tree"])){
@@ -45,11 +45,11 @@ class C_editModel extends C_admin
 
         switch ($action) {
             case "edit";
-                return $this->edit();
+                $this->edit();
                 break;
 
             case "save";
-                return $this->save();
+                $this->save();
                 break;
 
             case "home":
@@ -75,7 +75,7 @@ class C_editModel extends C_admin
     private function save()
     {
 
-        $structure=$this->db->getModelDefinition($this->model->getType());
+        $structure=$this->db->getRecordDefinition($this->model->getType());
         foreach($structure->fields as $field){
             $var=$field->varName;
             if(isset($_POST[$var])){

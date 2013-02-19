@@ -1,6 +1,6 @@
 <?php
 /* @var $this View */
-/* @var $vv VV_layout */
+/* @var $vv VM_layout */
 $vv = $_vars;
 ?>
 
@@ -24,8 +24,12 @@ $vv = $_vars;
 <script src="js/ginette/GinetteApiFileImage.js"></script>
 
 <script src="js/ginette/GinetteRecord.js"></script>
+
 <script src="js/ginette/fields/GinetteFieldFile.js"></script>
+<script src="js/ginette/fields/GinetteFieldRecord.js"></script>
+
 <script src="js/ginette/FileManager.js"></script>
+<script src="js/ginette/RecordsManager.js"></script>
 
 
 <script src="js/main.js"></script>

@@ -121,11 +121,12 @@ class ImageWorkshopLayer
     
     // Magicals
     // =========================================================
-    
+
     /**
      * Constructor
      *
      * @param \resource $image
+     * @throws Exception\ImageWorkshopLayerException
      */
     public function __construct($image)
     {
@@ -235,7 +236,7 @@ class ImageWorkshopLayer
      * Return new sublayer level if success or false otherwise
      *
      * @param integer $layerId
-     * @param integer $level
+     * @internal param int $level
      *
      * @return mixed
      */
@@ -1249,6 +1250,7 @@ class ImageWorkshopLayer
      * @param integer $positionY
      * @param integer $fontRotation
      *
+     * @throws Exception\ImageWorkshopLayerException
      * @return array
      */
     public function write($text, $fontPath, $fontSize = 13, $color = 'ffffff', $positionX = 0, $positionY = 0, $fontRotation = 0)

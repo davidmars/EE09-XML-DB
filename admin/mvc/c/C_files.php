@@ -27,7 +27,7 @@ class C_files extends C_admin
 
         switch ($action) {
             case "dirContent":
-                return $this->dirContent($_GET["folderPath"]);
+                $this->dirContent($_GET["folderPath"]);
                 break;
 
             case "popIn":
@@ -50,7 +50,7 @@ class C_files extends C_admin
      * @param $folderPath
      */
     public function dirContent($folderPath){
-        $folderPath=$folderPath;
+        /** @var $dir GinetteDir */
         $dir=$this->db->getFileInstance(urldecode($folderPath));
         $v=new View("files/dir-content",new VM_file_dir($dir));
         header('Content-Type: text/html; charset=utf-8');

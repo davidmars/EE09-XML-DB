@@ -122,7 +122,7 @@ class ImageWorkshopLib
 
         return $image;
     }
-    
+
     /**
      * Return dimension of a text
      *
@@ -131,6 +131,7 @@ class ImageWorkshopLib
      * @param $fontFile
      * @param $text
      *
+     * @throws Exception\ImageWorkshopLibException
      * @return array or boolean
      */
     public static function getTextBoxDimension($fontSize, $fontAngle, $fontFile, $text)

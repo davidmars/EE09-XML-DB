@@ -15,7 +15,7 @@ $this->inside("layout/layout-edit-record",$vv->getLayout());
     <div class="row">
         <div class="span2">
             <div class="thumbnail">
-                <?php /*<img src="<?=$vv->model->getThumbnail()->getUrl()?>" alt=""> */?>
+                <img src="<?=$vv->model->getThumbnail()->sizedShowAll(200,200)?>" alt="">
             </div>
         </div>
         <div class="span6">

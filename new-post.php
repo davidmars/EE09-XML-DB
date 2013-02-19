@@ -12,7 +12,7 @@ $db=new GinetteDb("myDatabase1");
 
 echo "<h1>New Image</h1>";
 
-if(!$db->modelExists("nous-3-image")){
+if(!$db->recordExists("nous-3-image")){
     $im=new Image("nous-3-image");
     $im->file->setUrl("myDatabase1/files/nous-3.jpg");
     $im->save();

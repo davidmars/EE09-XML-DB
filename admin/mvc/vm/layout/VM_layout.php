@@ -14,7 +14,7 @@ class VM_layout extends VM_admin
      * @return VM_record_list
      */
     public function getModelList(){
-        $arr=self::$db->getModelList();
+        $arr=self::$db->getRecordList();
         return new VM_record_list($arr);
     }
 
