@@ -11,11 +11,13 @@ $vv = $_vars;
 ?>
 
 <div class=" record-preview">
+    <?php /*
     <div class="btns">
     <a class="close pull-right" href="#">&times;</a>
     </div>
+    */?>
     <a class="thumb" href="#">
-        <img style="width:100px;" src="<?=$vv->getThumbnail()->sizedWidth(100,100)?>" alt="">
+        <img style="width:100px;" src="<?=$vv->getThumbnail()->sizedShowAll(100,100,"#eeeeee")?>" alt="">
     </a>
     <div class="text">
         <h4 class="media-heading"><?=$vv->getId()?></h4>

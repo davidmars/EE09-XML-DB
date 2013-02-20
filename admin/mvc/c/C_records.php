@@ -28,7 +28,7 @@ class C_records extends C_admin
 
         switch ($action) {
             case "listRecords":
-                $this->listRecords($recordType);
+                $this->listRecords($recordType,$_GET["rangeStart"]);
                 break;
 
             case "popIn":
@@ -50,9 +50,9 @@ class C_records extends C_admin
      *
      * @param string $recordType Name of the record family
      */
-    public function listRecords($recordType){
+    public function listRecords($recordType,$start=0){
         //$records=$this->db->getRecordList();
-        $v=new View("records/list-records",new VM_records_selection($recordType));
+        $v=new View("records/list-records",new VM_records_selection($recordType,$start,200));
         header('Content-Type: text/html; charset=utf-8');
         echo $v->render();
     }
@@ -61,8 +61,8 @@ class C_records extends C_admin
      * @param $recordType
      * @return string The url to display ajax content of a directory
      */
-    public static function urlListRecords($recordType){
-        $url=self::$baseUrl."?p=records&action=listRecords&type=$recordType";
+    public static function urlListRecords($recordType,$start=0){
+        $url=self::$baseUrl."?p=records&action=listRecords&type=$recordType&rangeStart=$start";
         return $url;
     }
 

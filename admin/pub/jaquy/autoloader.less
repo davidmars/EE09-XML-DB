@@ -1,0 +1,48 @@
+[jaquy-autoload-loading]{
+  clear: both;
+  background-color: #da4a85;
+  display: block;
+  width: 20px;
+  height: 20px;
+  .border-radius(10px);
+  margin:30px ;
+
+  animation: loadinganim 0.2s;
+  -moz-animation: loadinganim 0.2s; /* Firefox */
+  -webkit-animation: loadinganim 0.2s; /* Safari and Chrome */
+  -o-animation: loadinganim 0.2s; /* Opera */
+}
+
+.loadinganim(){
+  from {
+    background: #da4a85;
+    //.border-radius(0px);
+    //.rotate(90deg);
+  }
+  to {
+    background: #ffebf0;
+    //.border-radius(5px);
+    //.rotate(180deg);
+  }
+}
+
+@keyframes loadinganim
+{
+  .loadinganim();
+}
+@-webkit-keyframes loadinganim /* Safari and Chrome */
+{
+  .loadinganim();
+}
+
+@-moz-keyframes loadinganim /* Firefox */
+{
+  .loadinganim();
+}
+
+
+
+@-o-keyframes loadinganim /* Opera */
+{
+  .loadinganim();
+}

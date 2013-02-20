@@ -31,15 +31,16 @@ EventDispatcher = function () {
     this.addEventListener = function (event, fn) {
         var listenersList = listeners[event];
         if (!listenersList) {
-            //init the object
+            //init the list for this type of event
             listenersList = listeners[event] = [];
         }
-        listenersList.push(
-            {
-                event:event,
-                fn:fn
-            }
-        );
+        var ev={
+            uid:EventDispatcher.getUid(),
+            event:event,
+            fn:fn
+        }
+        listenersList.push(ev);
+        return ev;
     };
 
     /**
@@ -56,7 +57,11 @@ EventDispatcher = function () {
         }
     }
 };
-
+EventDispatcher.uid=0;
+EventDispatcher.getUid=function(){
+    "use strict";
+    return EventDispatcher.uid++;
+}
 
 var EVENT_SUCCESS="event-success";
 var EVENT_ERROR="event-error";

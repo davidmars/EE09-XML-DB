@@ -16,35 +16,43 @@ class VM_records_selection extends VM_admin
     /**
      * @param string $type
      */
-    public function __construct($type){
+    public function __construct($type,$rangeStart=0,$rangeLength=100){
         $this->type=$type;
+        $this->rangeStart=$rangeStart;
+        $this->rangeLength=$rangeLength;
+        $this->records=$this->getList();
     }
 
-    private $_recordsList;
+    /**
+     * @var GinetteRecord[]
+     */
+    public $records;
     /**
      * @return GinetteRecord[] The records you probably need
      */
-    public function getList($number=null){
-        if($this->_recordsList){
-            return $this->_recordsList;
-        }else{
-            $all=self::$db->getRecordList($this->type);
-            if($number){
-                for($i=0;$i<$number;$i++){
-                    $this->_recordsList[]=$all[$i];
-                }
-            }else{
-                $this->_recordsList=self::$db->getRecordList($this->type);
-            }
+    private function getList(){
 
-        }
-        return $this->_recordsList;
+        $search=self::$db->find($this->type)->rangeStartAt($this->rangeStart)->rangeTotal($this->rangeLength);
+        $records=$search->doIt();
+        return $records;
+
     }
 
+    /**
+     * @return bool|string Return the next range of records url
+     */
+    public function nextUrl(){
+        if($this->rangeStart<$this->count()){
+            return C_records::urlListRecords($this->type,$this->rangeStart+$this->rangeLength,$this->rangeLength);
+        }else{
+            return false;
+        }
+    }
     /**
      * @return int The number of records in this selection
      */
     public function count(){
-        return count($this->getList());
+        return self::$db->find($this->type)->length();
     }
 }
+

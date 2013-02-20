@@ -51,10 +51,12 @@ var SimpleAjax=function(url,data,cache){
             success:
                 function (response){
                     me.events.dispatchEvent(EVENT_AJAX_SUCCESS,response);
+                    SimpleAjax.globalEvents.dispatchEvent(EVENT_AJAX_SUCCESS,response);
                 }
         });
     }
 }
+SimpleAjax.globalEvents=new EventDispatcher();
 /**
  * The event identifier for a successful ajax request.
  * @type {String}

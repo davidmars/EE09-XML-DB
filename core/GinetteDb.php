@@ -65,11 +65,24 @@ class GinetteDb
         //boot the database
         $this->bootDefinitions();
 
-        //
+        //indexes
         $this->settings=new GinetteDbSettings($this);
         $this->index=new GinetteDbIndex($this);
 
         $this->fileRoot=new GinetteDir($this->paths->files,$this);
+
+
+    }
+
+    /**
+     * Use it to find records in this database.
+     * @param string $type Type of records you search
+     * @return GinetteRecordFinder
+     */
+    public function find($type){
+        $finder=new GinetteRecordFinder($this);
+        $finder->selectType($type);
+        return $finder;
     }
 
     /**
