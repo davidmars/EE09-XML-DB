@@ -52,7 +52,7 @@ class C_records extends C_admin
      */
     public function listRecords($recordType,$start=0){
         //$records=$this->db->getRecordList();
-        $v=new View("records/list-records",new VM_records_selection($recordType,$start,200));
+        $v=new View("records/list-records",new VM_records_selection($recordType,$start,500));
         header('Content-Type: text/html; charset=utf-8');
         echo $v->render();
     }

@@ -81,9 +81,11 @@ class GinetteDb
      */
     public function find($type){
         $finder=new GinetteRecordFinder($this);
-        $finder->selectType($type);
+        $finder->type($type);
         return $finder;
     }
+
+
 
     /**
      * Name of the database. In fact it is the directory name

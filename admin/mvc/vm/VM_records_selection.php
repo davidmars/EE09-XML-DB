@@ -32,7 +32,7 @@ class VM_records_selection extends VM_admin
      */
     private function getList(){
 
-        $search=self::$db->find($this->type)->rangeStartAt($this->rangeStart)->rangeTotal($this->rangeLength);
+        $search=self::$db->find($this->type)->sortById()->rangeStartAt($this->rangeStart)->rangeTotal($this->rangeLength);
         $records=$search->doIt();
         return $records;
 

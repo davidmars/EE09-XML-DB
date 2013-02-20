@@ -24,9 +24,16 @@ class GinetteRecordFinder
      * @param string $type To search a certain type of record
      * @return \GinetteRecordFinder
      */
-    public function selectType($type)
+    public function type($type)
     {
         $this->type=$type;
+        return $this;
+    }
+
+    private $sortBy;
+
+    public function sortById(){
+        $this->sortBy="id";
         return $this;
     }
 
@@ -82,8 +89,7 @@ class GinetteRecordFinder
     {
         $records = $this->getSelectionWithoutRange();
 
-        //order by field plus asc, desc etc...
-        //TODO::orderBy
+
 
         //range at the end
         if (isset($this->rangeStart) && isset($this->rangeTotal)) {
@@ -106,6 +112,7 @@ class GinetteRecordFinder
         //die("-------------".$listXml->length."-----------------");
         //transform xml to records
         $records = array();
+
         for ($i=0;$i<$listXml->length;$i++) {
             $n=$listXml->item($i);
             $type = $n->nodeName;
@@ -116,8 +123,22 @@ class GinetteRecordFinder
             }
         }
 
-    //where field = or field like field > e
-    //TODO::where conditions
+        //where field = or field like field > e
+        //TODO::where conditions
+
+        //order by field plus asc, desc etc...
+        //TODO::orderBy
+        if($this->sortBy){
+            $sorter=new GinetteRecordSorter($records);
+            switch($this->sortBy){
+                case "id":
+                    $records=$sorter->sortById();
+                    break;
+                default:
+                    break;
+            }
+        }
+
 
         return $records;
     }
